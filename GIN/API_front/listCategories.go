@@ -36,7 +36,7 @@ func ListCategories(c *gin.Context) {
 				categoryJsons = append(categoryJsons, categoryJson)
 			}
 			type returnmsg struct {
-				CategoryJsons []categoryJson `json:"categories"`
+				CategoryJsons []categoryJson `json:"items"`
 			}
 			c.JSON(200, SUCCESSRESPONSE(returnmsg{CategoryJsons: categoryJsons}))
 		} else {
