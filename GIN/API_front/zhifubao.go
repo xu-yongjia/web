@@ -5,6 +5,7 @@ import (
 	"gintest/DBstruct"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/smartwalle/alipay/v3"
@@ -71,7 +72,8 @@ func Pay(c *gin.Context) {
 			for _, order := range Order_list {
 				product := DBstruct.Product{}
 				if e = DBstruct.DB.Where("id = ?", order.ProductId).Find(&product).Error; e == nil {
-					price += float64(order.Num) * float64(product.Price)
+					price, _ := strconv.ParseFloat(product.Price, 64)
+					price += float64(order.Num) * price
 				} else {
 					c.JSON(201, ERRRESPONSE("找不到商品", 201))
 					return

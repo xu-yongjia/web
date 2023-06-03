@@ -114,17 +114,17 @@ func ListProducts(c *gin.Context) {
 
 // Product 商品序列化器
 type Product struct {
-	ID            uint    `json:"id"`
-	Name          string  `json:"name"`
-	CanteenID     int     `json:"canteen_id"`
-	CategoryID    int     `json:"category_id"`
-	Title         string  `json:"title"`
-	Info          string  `json:"info"`
-	ImgPath       string  `json:"img_path"`
-	Price         float32 `json:"price"`
-	DiscountPrice float32 `json:"discount_price"`
-	View          uint64  `json:"view"`
-	CreatedAt     int64   `json:"created_at"`
+	ID            uint   `json:"id"`
+	Name          string `json:"name"`
+	CanteenID     int    `json:"canteen_id"`
+	CategoryID    int    `json:"category_id"`
+	Title         string `json:"title"`
+	Info          string `json:"info"`
+	ImgPath       string `json:"img_path"`
+	Price         string `json:"price"`
+	DiscountPrice string `json:"discount_price"`
+	View          uint64 `json:"view"`
+	CreatedAt     int64  `json:"created_at"`
 }
 
 // BuildProduct 序列化商品
