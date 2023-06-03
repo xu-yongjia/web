@@ -50,5 +50,6 @@ func migration() {
 		AutoMigrate(&Product{}).
 		AutoMigrate(&User{}).
 		AutoMigrate(&Canteen{}).
-		AutoMigrate(&Comment{})
+		AutoMigrate(&Comment{}).
+		AutoMigrate(&Adm{})
 }
