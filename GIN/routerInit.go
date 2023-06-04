@@ -62,14 +62,21 @@ func NewRouter() *gin.Engine {
 		// 	//支付操作
 		// 	v1.GET("payments", api1.ConfirmPay)
 		// 	// 需要登录保护的
-		v1.POST("payments", api1.Pay)
+
 		// s.GET("/alipay/pay", pay)
 		v1.GET("/alipay/callback", api1.Callback)
 		v1.POST("/alipay/notify", api1.Notify)
+
 		// s.Run(":" + kServerPort)
 		authed := v1.Group("users/")
 		authed.Use(middleware.JWT())
 		{
+			authed.POST("payments", api1.Pay)
+			authed.POST("createOrder", api1.CreateOrder)
+			//获取购物车
+			authed.POST("getCart", api1.GetCart)
+			//获取订单
+			authed.POST("getorder", api1.GetOrder)
 			// 		//验证token
 			// 		authed.GET("ping", api1.CheckToken)
 			// 		//用户操作
@@ -109,6 +116,7 @@ func NewRouter() *gin.Engine {
 
 			// 		//数量操作
 			// 		authed.GET("counts/:id", api1.ShowCount)
+
 		}
 
 	}

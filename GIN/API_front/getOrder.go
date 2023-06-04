@@ -21,6 +21,13 @@ type orderJson struct {
 	DeliverID    int       `json:"deliver_id"`    //配送员编号
 	DeliverName  string    `json:"deliver_name"`  //配送员姓名
 	DeliverPhone string    `json:"deliver_phone"` //配送员电话
+
+	Price         string `json:"price"`
+	DiscountPrice string `json:"discount_price"` //折后价
+	Info          string `json:"product_intro"`  //商品简介
+	ImgPath       string `json:"img_path"`       //外面的大图
+	Title         string `json:"title"`          //标题
+	Score         string `json:"score"`          //评分
 } //要加上一个product_price字段
 func getJsonOrder(src DBstruct.Order) (orderJson, error) {
 	product := DBstruct.Product{}
@@ -39,6 +46,13 @@ func getJsonOrder(src DBstruct.Order) (orderJson, error) {
 		DeliverID:    src.DeliverID,
 		DeliverName:  src.DeliverName,
 		DeliverPhone: src.DeliverPhone,
+
+		Price:         product.Price,
+		DiscountPrice: product.DiscountPrice,
+		Info:          product.Info,
+		ImgPath:       product.ImgPath,
+		Title:         product.Title,
+		Score:         product.Score,
 	}, e
 }
 
