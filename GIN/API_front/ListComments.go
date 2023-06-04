@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Category 分类序列化器
-type Comment struct {
+// Comment 分类序列化器
+type Comment_json1 struct {
 	ID             uint   `json:"id"`
 	ProductID      uint   `json:"ProductID"`
 	UserName       string `json:"user_name"`
@@ -28,9 +28,9 @@ func ListComments(c *gin.Context) {
 	}
 }
 
-// BuildCategory 序列化分类
-func BuildComment(item DBstruct.Comment) Comment {
-	return Comment{
+// BuildComment 序列化评论
+func BuildComment(item DBstruct.Comment) Comment_json1 {
+	return Comment_json1{
 		ID:             item.ID,
 		ProductID:      item.ProductID,
 		UserName:       item.UserName,
@@ -40,8 +40,8 @@ func BuildComment(item DBstruct.Comment) Comment {
 	}
 }
 
-// BuildCategories 序列化分类列表
-func BuildComments(items []DBstruct.Comment) (comments []Comment) {
+// BuildComments 序列化评论列表
+func BuildComments(items []DBstruct.Comment) (comments []Comment_json1) {
 	for _, item := range items {
 		comment := BuildComment(item)
 		comments = append(comments, comment)
@@ -49,27 +49,15 @@ func BuildComments(items []DBstruct.Comment) (comments []Comment) {
 	return comments
 }
 
-// BuildListResponse 带有总数的列表构建器
-func BuildListResponse(items interface{}, total uint) EResponse {
-	return EResponse{
-		Status: 200,
-		Msg:    "ok",
-		Data: DataList{
-			Items: items,
-			Total: total,
-		},
-	}
-}
-
-// ListCategoriesService 分类列表服务
+// ListCommentsService 评论列表服务
 type ListCommentsService struct {
 	Limit     int  `form:"limit" json:"limit"`
 	Start     int  `form:"start" json:"start"`
 	ProductID uint `form:"productID" json:"productID"`
 }
 
-// List 视频列表
-func (service *ListCommentsService) List() EResponse {
+// List 评论列表
+func (service *ListCommentsService) List() Response {
 
 	comments := []DBstruct.Comment{}
 
@@ -81,7 +69,7 @@ func (service *ListCommentsService) List() EResponse {
 	}
 	if err := DBstruct.DB.Model(DBstruct.Comment{}).Where("product_id=?", service.ProductID).Count(&total).Error; err != nil {
 		code = e.ERROR_DATABASE
-		return EResponse{
+		return Response{
 			Status: code,
 			Msg:    e.GetMsg(code),
 			Error:  err.Error(),
@@ -90,7 +78,7 @@ func (service *ListCommentsService) List() EResponse {
 
 	if err := DBstruct.DB.Where("product_id=?", service.ProductID).Limit(service.Limit).Offset(service.Start).Find(&comments).Error; err != nil {
 		code = e.ERROR_DATABASE
-		return EResponse{
+		return Response{
 			Status: code,
 			Msg:    e.GetMsg(code),
 			Error:  err.Error(),

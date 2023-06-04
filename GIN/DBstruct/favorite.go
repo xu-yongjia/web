@@ -1,7 +1,9 @@
 package DBstruct
 
+import "github.com/jinzhu/gorm"
+
 type Favorite struct {
-	Record_id int `gorm:"primary_key"`
-	UserID    int
-	ProducID  int
+	gorm.Model
+	UserID   int
+	ProducID int
 }

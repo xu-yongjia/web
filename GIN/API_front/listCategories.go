@@ -2,47 +2,114 @@ package api1
 
 import (
 	"gintest/DBstruct"
-	"time"
+	"gintest/pkg/e"
 
 	"github.com/gin-gonic/gin"
 )
 
-type categoryJson struct {
-	CategoryID   uint      `json:"category_id"`
-	CategoryName string    `json:"category_name"`
-	CreatedAt    time.Time `json:"created_at"`
-}
-
-func getJsonCategory(src DBstruct.Category) categoryJson {
-	return categoryJson{
-		CategoryID:   src.CategoryID,
-		CategoryName: src.CategoryName,
-		CreatedAt:    src.CreatedAt,
-	}
-}
-
-// 读取报文体的palceID
+// ListCategories 分类列表接口
 func ListCategories(c *gin.Context) {
-	type msg struct {
-		CanteenID uint `form:"placeID" json:"placeID"`
+	service := ListCategoriesService{}
+	if err := c.ShouldBind(&service); err == nil {
+		res := service.List()
+		c.JSON(200, res)
+	} else {
+		c.JSON(201, ERRRESPONSE(err.Error(), 201))
+		// logging.Info(err)
 	}
-	var m msg
-	if e := c.ShouldBindJSON(&m); e == nil {
-		categoryRecords := make([]DBstruct.Category, 0)
-		if e = DBstruct.DB.Where("canteen_id = ?", m.CanteenID).Find(&categoryRecords).Error; e == nil {
-			categoryJsons := make([]categoryJson, 0)
-			for _, categoryRecord := range categoryRecords {
-				categoryJson := getJsonCategory(categoryRecord)
-				categoryJsons = append(categoryJsons, categoryJson)
+}
+
+// ListCategoriesService 分类列表服务
+type ListCategoriesService struct {
+	Limit     int  `form:"limit" json:"limit"`
+	Start     int  `form:"start" json:"start"`
+	CanteenID uint `form:"placeID" json:"placeID"`
+}
+
+// List 分类列表
+func (service *ListCategoriesService) List() Response {
+
+	categories := []DBstruct.Category{}
+
+	total := 0
+	code := e.SUCCESS
+
+	if service.Limit == 0 {
+		service.Limit = 15
+	}
+
+	//fmt.Printf("service.CanteenID: %v\n", service.CanteenID)
+	if service.CanteenID == 0 { //返回全部
+		if err := DBstruct.DB.Model(DBstruct.Category{}).Count(&total).Error; err != nil {
+			// logging.Info(err)
+			code = e.ERROR_DATABASE
+			return Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+				Error:  err.Error(),
 			}
-			type returnmsg struct {
-				CategoryJsons []categoryJson `json:"items"`
+		}
+
+		if err := DBstruct.DB.Limit(service.Limit).Offset(service.Start).Find(&categories).Error; err != nil {
+			// logging.Info(err)
+			code = e.ERROR_DATABASE
+			return Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+				Error:  err.Error(),
 			}
-			c.JSON(200, SUCCESSRESPONSE(returnmsg{CategoryJsons: categoryJsons}))
-		} else {
-			c.JSON(201, ERRRESPONSE(e.Error(), 201))
 		}
 	} else {
-		c.JSON(400, ERRRESPONSE("数据格式错误", 201))
+		if err := DBstruct.DB.Model(DBstruct.Category{}).Where("canteen_id=?", service.CanteenID).Count(&total).Error; err != nil {
+			// logging.Info(err)
+			code = e.ERROR_DATABASE
+			return Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+				Error:  err.Error(),
+			}
+		}
+
+		if err := DBstruct.DB.Where("canteen_id=?", service.CanteenID).Limit(service.Limit).Offset(service.Start).Find(&categories).Error; err != nil {
+			// logging.Info(err)
+			code = e.ERROR_DATABASE
+			return Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+				Error:  err.Error(),
+			}
+		}
+	}
+
+	return BuildListResponse(BuildCategories(categories), uint(total))
+
+}
+
+// Category 分类序列化器
+type Category struct {
+	ID           uint   `json:"id"`
+	CategoryID   uint   `json:"category_id"`
+	CategoryName string `json:"category_name"`
+	CreatedAt    int64  `json:"created_at"`
+}
+
+// BuildCategory 序列化分类
+func BuildCategory(item DBstruct.Category) Category {
+	return Category{
+		ID:           item.ID,
+		CategoryID:   item.CategoryID,
+		CategoryName: item.CategoryName,
+		CreatedAt:    item.CreatedAt.Unix(),
 	}
 }
+
+// BuildCategories 序列化分类列表
+func BuildCategories(items []DBstruct.Category) (categories []Category) {
+	for _, item := range items {
+		category := BuildCategory(item)
+		categories = append(categories, category)
+	}
+	return categories
+}
+
+// TrackedErrorResponse 有追踪信息的错误响应

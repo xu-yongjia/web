@@ -21,10 +21,10 @@ const (
 	//应用号（APPID)
 	kAppId = "2021000122694478"
 	//应用私钥，在支付宝-控制台-沙箱-加密-开发信息-接口加签模式-证书模式-查看，复制后黏贴到这里
-	kPrivateKey = "MIIEpAIBAAKCAQEAyZMA4UNDthsHLOEG5lAYtioN+RTM7vAbHV9Ud9UnI6vhEvmXQzNYN4Vz9jKbsDzFZoZSAbe2e65zyVkn/vLFXQY2AnstoMnPu0rzLT3gCuREOeTAtsFF3riBf40jTubov0UukSp1+mehQuhsicH8bu+QyoFTDxhA7KdSm3eCG0/RhQiHPFtCJYGJKMjf9/NWpYkdqF//ugS3zzVnftB5tDdEXWmUbYXRocnfjqtUGDuXknTXOWXO2hhihU8feyLIwmwxlz3CCCBn1xjIAJXRGk7sdxEhUgWQ3a3cLPXnwchKaVpfLOgl1Lc+Sj9mhLpCB5+IUc9uxL4GyKxkd89itQIDAQABAoIBABlZpXiu7usOBx77xdRdKl5ud4dluEgsZhyRipvvcJap3Qp33TAUWvnQjL7fqnjFi8XTCqkwo4B2dhVSYxdLDMsgJta1Cw33k2poiKCd8XktL+9f92SEdfcGmTKjW1dm7spvNuYGwwOU2NEDTfMdNFP3SOxOy1VQpYmdmWP36aLpc7otjlsY+tw6ys4jby/sVAtxCGOT0edmxTFGuTSNwKRtjSoyZGe/O83HHWuyf0txkT6FcC9Yb5jPnTnAgLbmR59xWVuIkm4VUJaWvJyd1Gtzr5GnycHJWe4OfiBCoahKERbf94MMGv95V305Rq6XzmVmU9rJFpG7OcwUSJCNX8ECgYEA5Xxdda/h2FGdzykZx5N1IFtNsm+DN+PPP5Q9o068GSW/I8PbWCzTNAEV+8CX4bAhKFJxPfNQ4h8cNyH0Tm/t2iFqtSvTpCbttnz68l1U8x5SAfBkKAyKotzMO9QMZxtZa1OVfJQqbkWmozKB+QJsIobWmtY28sLP41ymsuZx3ikCgYEA4N0U5+hPPBG16U5STsSrz0z+e8oYLyr7nd/G7Kajd2lQoZINgJTSEBXFnoPYFzcQKcvTrn6nkBHK2Cp14wPoYg7eDWHZn/C8dLmeA8Bf1U9J6gywuB6ur2duA4fqAIdByn5o7yz5Kk8hyIwxWSMu2HYjxYEoQIhN0bFI04WgWa0CgYEAnmVX0OpkVT4IUbvJunIyLvI2T8oeZQ5Nt1GntbebpzPhmVsPY+4UnVl+hfTqIHHEgSNeXGc8VccpX3iFOzqQjrXwBDrK6wufmgzr3SvEfcZYzlPRnb8CVeVW5pi3MteywZzAmmteWhyjJxOumGQupSoyqE7hQHBssz75JJRg1fkCgYEArrw91aRZhhVBJgY9wYXk+Ncc3jcCKg0dr+XH3/fyCQXmqVckdOmwft1cTrynfArG3aPNX8h+D180IFyGdR2BREnHVeDWywm4eIARAVtJXSobBuxLmxgEqLsX61h/h1+TyXYHtuxcxvrtBrmiU2EaswzC6WRfUh5ZUnyQWgZ5v5UCgYBt8klPnF/iAtSFp4bNWeyKwBv651GqknQFghKDNaX5KIzrKxupwGAw8WWScXglI37WdsGnQ0IUQleZzHHYDmDzyB2l5V4J4+LmIvG0UZErBdIrgqwluTD9g93LxJuQbE/xasXXJBO6v6mpny7IZyamNP0gAkHyZ3clYcbscTs8Og=="
+	kPrivateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDJkwDhQ0O2Gwcs4QbmUBi2Kg35FMzu8BsdX1R31Scjq+ES+ZdDM1g3hXP2MpuwPMVmhlIBt7Z7rnPJWSf+8sVdBjYCey2gyc+7SvMtPeAK5EQ55MC2wUXeuIF/jSNO5ui/RS6RKnX6Z6FC6GyJwfxu75DKgVMPGEDsp1Kbd4IbT9GFCIc8W0IlgYkoyN/381aliR2oX/+6BLfPNWd+0Hm0N0RdaZRthdGhyd+Oq1QYO5eSdNc5Zc7aGGKFTx97IsjCbDGXPcIIIGfXGMgAldEaTux3ESFSBZDdrdws9efByEppWl8s6CXUtz5KP2aEukIHn4hRz27EvgbIrGR3z2K1AgMBAAECggEAGVmleK7u6w4HHvvF1F0qXm53h2W4SCxmHJGKm+9wlqndCnfdMBRa+dCMvt+qeMWLxdMKqTCjgHZ2FVJjF0sMyyAm1rULDfeTamiIoJ3xeS0v71/3ZIR19waZMqNbV2buym825gbDA5TY0QNN8x00U/dI7E7LVVCliZ2ZY/fpoulzui2OWxj63DrKziNvL+xUC3EIY5PR52bFMUa5NI3ApG2NKjJkZ787zccda7J/S3GRPoVwL1hvmM+dOcCAtuZHn3FZW4iSbhVQlpa8nJ3Ua3OvkafJwclZ7g5+IEKhqEoRFt/3gwwa/3lXfTlGrpfOZWZT2skWkbs5zBRIkI1fwQKBgQDlfF11r+HYUZ3PKRnHk3UgW02yb4M3488/lD2jTrwZJb8jw9tYLNM0ARX7wJfhsCEoUnE981DiHxw3IfROb+3aIWq1K9OkJu22fPryXVTzHlIB8GQoDIqi3Mw71AxnG1lrU5V8lCpuRaajMoH5Amwihtaa1jbyws/jXKay5nHeKQKBgQDg3RTn6E88EbXpTlJOxKvPTP57yhgvKvud38bspqN3aVChkg2AlNIQFcWeg9gXNxApy9OufqeQEcrYKnXjA+hiDt4NYdmf8Lx0uZ4DwF/VT0nqDLC4Hq6vZ24Dh+oAh0HKfmjvLPkqTyHIjDFZIy7YdiPFgShAiE3RsUjThaBZrQKBgQCeZVfQ6mRVPghRu8m6cjIu8jZPyh5lDk23Uae1t5unM+GZWw9j7hSdWX6F9OogccSBI15cZzxVxylfeIU7OpCOtfAEOsrrC5+aDOvdK8R9xljOU9GdvwJV5VbmmLcy17LBnMCaa15aHKMnE66YZC6lKjKoTuFAcGyzPvkklGDV+QKBgQCuvD3VpFmGFUEmBj3BheT41xzeNwIqDR2v5cff9/IJBeapVyR06bB+3VxOvKd8Csbdo81fyH4PXzQgXIZ1HYFEScdV4NbLCbh4gBEBW0ldKhsG7EubGASouxfrWH+HX5PJdge27FzG+u0GuaJTYRqzDMLpZF9SHllSfJBaBnm/lQKBgG3ySU+cX+IC1IWnhs1Z7IrAG/rnUaqSdAWCEoM1pfkojOsrG6nAYDDxZZJxeCUjftZ2wadDQhRCV5nMcdgOYPPIHaXlXgnj4uYi8bRRkSsF0iuCrCW5MP2D3cvEm5BsT/FqxdckE7q/qamfLshnJqY0/SACQfJndyVhxuxxOzw6"
 	kServerPort = "9989"
 	//设置回调地址域名，将内网穿透的URL放到这里
-	kServerDomain = "http://250087ff.r6.cpolar.top"
+	kServerDomain = "http://2294e99e.r11.cpolar.top"
 )
 
 func InitPay() {
@@ -67,13 +67,14 @@ func Pay(c *gin.Context) {
 	price := 0.0
 	if e := c.ShouldBindJSON(&m); e == nil {
 		Order_list := []DBstruct.Order{}
-		if e = DBstruct.DB.Where("order_id = ? AND status = ?", m.Order_id, "未支付").Find(&Order_list).Error; e == nil {
+		if e = DBstruct.DB.Where("order_id = ? AND status = ?", m.Order_id, "未支付").Find(&Order_list).Error; e == nil && len(Order_list) > 0 {
 			fmt.Println(Order_list)
 			for _, order := range Order_list {
 				product := DBstruct.Product{}
 				if e = DBstruct.DB.Where("id = ?", order.ProductId).Find(&product).Error; e == nil {
-					price, _ := strconv.ParseFloat(product.Price, 64)
-					price += float64(order.Num) * price
+					productprice, _ := strconv.ParseFloat(product.DiscountPrice, 64)
+					fmt.Println(float64(order.Num), productprice)
+					price += float64(order.Num) * productprice
 				} else {
 					c.JSON(201, ERRRESPONSE("找不到商品", 201))
 					return

@@ -21,7 +21,6 @@ func AddShoppingCart(c *gin.Context) {
 		productRecord := DBstruct.Product{}
 		if e = DBstruct.DB.Where("id = ? ", m.Product_id).First(&productRecord).Error; e == nil { //查找商品记录，获取食堂ID等信息
 			newCartRecord := DBstruct.Cart{ //新的购物车记录
-				ID:        0,
 				UserId:    m.User_id,
 				ProductId: m.Product_id,
 				Number:    1,

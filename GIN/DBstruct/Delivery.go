@@ -1,8 +1,10 @@
 package DBstruct
 
+import "github.com/jinzhu/gorm"
+
 // Canteen 分类模型
 type Delivery struct {
-	ID            int `gorm:"primary_key,unique"`
+	gorm.Model
 	Truename      string
 	Phone         string
 	CanteenNumber int

@@ -1,6 +1,7 @@
 package main
 
 import (
+	api2 "gintest/API_back"
 	api1 "gintest/API_front"
 	"gintest/middleware"
 
@@ -17,10 +18,17 @@ func NewRouter() *gin.Engine {
 
 	v1 := r.Group("/api/v1/")
 	{
-		v1.GET("categories", api1.ListCategories)
-		//评论操作
-		v1.POST("getDetailsComment", api1.ListComments)
-		//商品操作
+		//商品详情
+		v1.POST("product/getDetails", api1.ShowProduct)
+		//获取菜品图片url
+		v1.POST("product/getDetailspicture", api1.ShowProductImgs)
+		//获取评论
+		v1.POST("product/getDetailsComment", api1.ListComments)
+		//获取评分排行榜
+		v1.POST("rankings", api1.ListRanking)
+		//获取有哪些菜品类别
+		v1.POST("categories", api1.ListCategories)
+		//获取菜品列表
 		v1.POST("products", api1.ListProducts)
 		//轮播图
 		v1.GET("carousels", api1.ListCarousels)
@@ -38,9 +46,6 @@ func NewRouter() *gin.Engine {
 		// 	v1.GET("imgs/:id", api1.ShowProductImgs)
 		//商品详情图片操作
 		//v1.GET("info-imgs/:id", api.ShowInfoImgs)
-		//商品详情
-		v1.POST("product/getDetails", api1.GetDetails)
-
 		// 	//商品参数图片操作
 		// 	v1.GET("param-imgs/:id", api1.ShowParamImgs)
 		// 	//分类操作
@@ -57,14 +62,21 @@ func NewRouter() *gin.Engine {
 		// 	//支付操作
 		// 	v1.GET("payments", api1.ConfirmPay)
 		// 	// 需要登录保护的
-		v1.POST("payments", api1.Pay)
+
 		// s.GET("/alipay/pay", pay)
 		v1.GET("/alipay/callback", api1.Callback)
 		v1.POST("/alipay/notify", api1.Notify)
+
 		// s.Run(":" + kServerPort)
 		authed := v1.Group("users/")
 		authed.Use(middleware.JWT())
 		{
+			authed.POST("payments", api1.Pay)
+			authed.POST("createOrder", api1.CreateOrder)
+			//获取购物车
+			authed.POST("getCart", api1.GetCart)
+			//获取订单
+			authed.POST("getorder", api1.GetOrder)
 			// 		//验证token
 			// 		authed.GET("ping", api1.CheckToken)
 			// 		//用户操作
@@ -73,6 +85,8 @@ func NewRouter() *gin.Engine {
 			// 		// 上传操作
 			// 		authed.POST("avatar", api1.UploadToken)
 			// 		//收藏夹操作
+			//提交评论
+			authed.POST("comment", api1.CreateComment)
 			authed.POST("collect/addCollect", api1.AddCollect)
 			// 		authed.GET("favorites/:id", api1.ShowFavorites)
 			// 		authed.POST("favorites", api1.CreateFavorite)
@@ -102,46 +116,48 @@ func NewRouter() *gin.Engine {
 
 			// 		//数量操作
 			// 		authed.GET("counts/:id", api1.ShowCount)
+
 		}
 
 	}
-	// v2 := r.GroupS("/api1/v2")
-	// {
-	// 	// 管理员注册
-	// 	v2.POST("admin/register", api2.AdminRegister)
-	// 	// 管理员登录
-	// 	v2.POST("admin/login", api2.AdminLogin)
-	// 	//商品操作
-	// 	v2.GET("products", api2.ListProducts)
-	// 	v2.GET("products/:id", api2.ShowProduct)
-	// 	//轮播图操作
-	// 	v2.GET("carousels", api2.ListCarousels)
-	// 	//商品图片操作
-	// 	v2.GET("imgs/:id", api2.ShowProductImgs)
-	// 	//分类操作
-	// 	v2.GET("categories", api2.ListCategories)
-	// 	authed2 := v2.Group("/")
-	// 	//登录验证
-	// 	authed2.Use(middleware.JWTAdmin())
-	// 	{
-	// 		//商品操作
-	// 		authed2.POST("products", api2.CreateProduct)
-	// 		authed2.DELETE("products/:id", api2.DeleteProduct)
-	// 		authed2.PUT("products", api2.UpdateProduct)
-	// 		//轮播图操作
-	// 		authed2.POST("carousels", api2.CreateCarousel)
-	// 		//商品图片操作
-	// 		authed2.POST("imgs", api2.CreateProductImg)
-	// 		//商品详情图片操作
-	// 		authed2.POST("info-imgs", api2.CreateInfoImg)
-	// 		//商品参数图片操作
-	// 		authed2.POST("param-imgs", api2.CreateParamImg)
-	// 		//分类操作
-	// 		authed2.POST("categories", api2.CreateCategory)
-	// 		//公告操作
-	// 		authed2.POST("notices", api2.CreateNotice)
-	// 		authed2.PUT("notices", api2.UpdateNotice)
-	// 	}
-	// }
+	v2 := r.Group("/api1/v2")
+	{
+		// 	// 管理员注册
+		// 	v2.POST("admin/register", api2.AdminRegister)
+		// 	// 管理员登录
+		// 	v2.POST("admin/login", api2.AdminLogin)
+		// 	//商品操作
+		// 	v2.GET("products", api2.ListProducts)
+		// 	v2.GET("products/:id", api2.ShowProduct)
+		// 	//轮播图操作
+		// 	v2.GET("carousels", api2.ListCarousels)
+		// 	//商品图片操作
+		// 	v2.GET("imgs/:id", api2.ShowProductImgs)
+		// 	//分类操作
+		// 	v2.GET("categories", api2.ListCategories)
+		authed2 := v2.Group("/")
+		// 	//登录验证
+		authed2.Use(middleware.JWTAdmin())
+		{ // 上传操作
+			authed2.POST("avatar", api2.UploadToken)
+			// 		//商品操作
+			// 		authed2.POST("products", api2.CreateProduct)
+			// 		authed2.DELETE("products/:id", api2.DeleteProduct)
+			// 		authed2.PUT("products", api2.UpdateProduct)
+			// 		//轮播图操作
+			// 		authed2.POST("carousels", api2.CreateCarousel)
+			// 		//商品图片操作
+			// 		authed2.POST("imgs", api2.CreateProductImg)
+			// 		//商品详情图片操作
+			// 		authed2.POST("info-imgs", api2.CreateInfoImg)
+			// 		//商品参数图片操作
+			// 		authed2.POST("param-imgs", api2.CreateParamImg)
+			// 		//分类操作
+			// 		authed2.POST("categories", api2.CreateCategory)
+			// 		//公告操作
+			// 		authed2.POST("notices", api2.CreateNotice)
+			// 		authed2.PUT("notices", api2.UpdateNotice)
+		}
+	}
 	return r
 }

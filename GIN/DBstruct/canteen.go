@@ -8,4 +8,5 @@ type Canteen struct {
 	CanteenID   int
 	CanteenName string
 	ImgPath     string
+	Password    string
 }
