@@ -33,7 +33,7 @@ func CreateOrder(c *gin.Context) {
 					return
 				}
 				if newOrderID == 0 {
-					newOrderID = cartRecord.ID //将第一个cart记录的id作为这批order记录的order_id（主键是另一个id），避免并发处理时出错
+					newOrderID = uint64(cartRecord.ID) //将第一个cart记录的id作为这批order记录的order_id（主键是另一个id），避免并发处理时出错
 				}
 				newOrderRecord := DBstruct.Order{ //组合出新的order记录结构体
 					OrderID:   newOrderID,
