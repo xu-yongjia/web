@@ -47,7 +47,7 @@ func (service *ListCarouselsService) List() Response {
 type Carousel struct {
 	ID        uint   `json:"id"`
 	ImgPath   string `json:"img_path"`
-	ProductID uint   `json:"product_id"`
+	CanteenID uint   `json:"product_id"` //json名是历史遗留问题，不要在意
 	CreatedAt int64  `json:"created_at"`
 }
 
@@ -56,7 +56,7 @@ func BuildCarousel(item DBstruct.Carousel) Carousel {
 	return Carousel{
 		ID:        item.ID,
 		ImgPath:   item.ImgPath,
-		ProductID: item.ProductId,
+		CanteenID: item.CanteenId,
 		CreatedAt: item.CreatedAt.Unix(),
 	}
 }

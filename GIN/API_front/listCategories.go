@@ -90,16 +90,14 @@ type Category struct {
 	ID           uint   `json:"id"`
 	CategoryID   uint   `json:"category_id"`
 	CategoryName string `json:"category_name"`
-	CreatedAt    int64  `json:"created_at"`
 }
 
 // BuildCategory 序列化分类
 func BuildCategory(item DBstruct.Category) Category {
 	return Category{
-		ID:           item.ID,
+		ID:           item.CategoryID,
 		CategoryID:   item.CategoryID,
 		CategoryName: item.CategoryName,
-		CreatedAt:    item.CreatedAt.Unix(),
 	}
 }
 
