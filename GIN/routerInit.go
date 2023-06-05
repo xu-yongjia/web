@@ -126,6 +126,7 @@ func NewRouter() *gin.Engine {
 		// 	v2.POST("admin/register", api2.AdminRegister)
 		// 	// 管理员登录
 		v2.POST("admin/login", api2.AdminLogin)
+
 		// 	//商品操作
 		//	v2.GET("products", api2.ListProducts)
 		// 	v2.GET("products/:id", api2.ShowProduct)
@@ -137,9 +138,11 @@ func NewRouter() *gin.Engine {
 		// 	v2.GET("categories", api2.ListCategories)
 		authed2 := v2.Group("/")
 		// 	//登录验证
-		authed2.Use(middleware.JWTAdmin())
+		authed2.Use(middleware.JWT())
 		{ // 上传操作
 			authed2.POST("avatar", api2.UploadToken)
+			// 	// 查看用户信息
+			authed2.POST("admin/showUser", api2.ShowUser)
 			// 		//商品操作
 			// 		authed2.POST("products", api2.CreateProduct)
 			// 		authed2.DELETE("products/:id", api2.DeleteProduct)
