@@ -12,6 +12,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type Responsestruct struct {
+	Status int         `json:"status"`
+	Data   interface{} `json:"data"`
+	Msg    string      `json:"msg"`
+	Error  string      `json:"error"`
+}
+
 // UploadToken 上传授权
 func UploadToken(c *gin.Context) {
 	service := UploadImgService{}
@@ -30,13 +37,13 @@ type UploadImgService struct {
 }
 
 // Post 创建token
-func (service *UploadImgService) Post() Response {
+func (service *UploadImgService) Post() Responsestruct {
 	code := e.SUCCESS
 	client, err := oss.New(os.Getenv("OSS_END_POINT"), os.Getenv("OSS_ACCESS_KEY_ID"), os.Getenv("OSS_ACCESS_KEY_SECRET"))
 	if err != nil {
 		// logging.Info(err)
 		code = e.ERROR_OSS
-		return Response{
+		return Responsestruct{
 			Status: code,
 			Msg:    e.GetMsg(code),
 			Error:  err.Error(),
@@ -49,7 +56,7 @@ func (service *UploadImgService) Post() Response {
 	if err != nil {
 		// logging.Info(err)
 		code = e.ERROR_OSS
-		return Response{
+		return Responsestruct{
 			Status: code,
 			Msg:    e.GetMsg(code),
 			Error:  err.Error(),
@@ -73,7 +80,7 @@ func (service *UploadImgService) Post() Response {
 	if err != nil {
 		// logging.Info(err)
 		code = e.ERROR_OSS
-		return Response{
+		return Responsestruct{
 			Status: code,
 			Msg:    e.GetMsg(code),
 			Error:  err.Error(),
@@ -86,14 +93,14 @@ func (service *UploadImgService) Post() Response {
 	if err != nil {
 		// logging.Info(err)
 		code = e.ERROR_OSS
-		return Response{
+		return Responsestruct{
 			Status: code,
 			Msg:    e.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
 
-	return Response{
+	return Responsestruct{
 		Status: code,
 		Msg:    e.GetMsg(code),
 		Data: map[string]string{

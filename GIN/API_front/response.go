@@ -50,14 +50,6 @@ func SUCCESSRESPONSE_NODATA() Response {
 	}
 }
 
-// Response 基础序列化器
-type EResponse struct {
-	Status int         `json:"status"`
-	Data   interface{} `json:"data"`
-	Msg    string      `json:"msg"`
-	Error  string      `json:"error"`
-}
-
 func BuildListResponse(items interface{}, total uint) Response {
 	return Response{
 		Status: 200,
