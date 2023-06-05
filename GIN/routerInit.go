@@ -125,7 +125,7 @@ func NewRouter() *gin.Engine {
 		// 	// 管理员注册
 		// 	v2.POST("admin/register", api2.AdminRegister)
 		// 	// 管理员登录
-		// 	v2.POST("admin/login", api2.AdminLogin)
+		v2.POST("admin/login", api2.AdminLogin)
 		// 	//商品操作
 		// 	v2.GET("products", api2.ListProducts)
 		// 	v2.GET("products/:id", api2.ShowProduct)
