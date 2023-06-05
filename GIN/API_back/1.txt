@@ -278,7 +278,7 @@
                 "num":3,//下单的份数
                 "user_phone":"153333333333",
                 "status":"已支付",
-                "canteen":2,
+                "canteen_id":2,
                 "deliver_id":45,
                 "deliver_name":"张三",
                 "deliver_phone":"12332112345"

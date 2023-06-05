@@ -25,7 +25,7 @@ type OrderDisplay struct {
 	Num          int    `json:"num"`
 	UserPhone    string `json:"user_phone"`
 	Status       string `json:"status"`
-	Canteen      int    `json:"canteen"`
+	CanteenID    int    `json:"canteen_id"`
 	DeliverID    int    `json:"deliver_id"`
 	DeliverName  string `json:"deliver_name"`
 	DeliverPhone string `json:"deliver_phone"`
@@ -41,9 +41,9 @@ func ShowOrder(c *gin.Context) {
 
 	var orders []DBstruct.Order
 	if pagination.Status != "" {
-		DBstruct.DB.Where("canteen = ? AND status = ?", pagination.CanteenId, pagination.Status).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
+		DBstruct.DB.Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
 	} else {
-		DBstruct.DB.Where("canteen = ?", pagination.CanteenId).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
+		DBstruct.DB.Where("canteen_id = ?", pagination.CanteenId).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
 	}
 
 	var orderDisplays []OrderDisplay
@@ -60,7 +60,7 @@ func ShowOrder(c *gin.Context) {
 		orderDisplay.Num = order.Num
 		orderDisplay.UserPhone = order.UserPhone
 		orderDisplay.Status = order.Status
-		orderDisplay.Canteen = order.Canteen
+		orderDisplay.CanteenID = order.CanteenID
 		orderDisplay.DeliverID = order.DeliverID
 		orderDisplay.DeliverName = order.DeliverName
 		orderDisplay.DeliverPhone = order.DeliverPhone
@@ -70,9 +70,9 @@ func ShowOrder(c *gin.Context) {
 
 	var totalCount int
 	if pagination.Status != "" {
-		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen = ? AND status = ?", pagination.CanteenId, pagination.Status).Count(&totalCount)
+		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status).Count(&totalCount)
 	} else {
-		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen = ?", pagination.CanteenId).Count(&totalCount)
+		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ?", pagination.CanteenId).Count(&totalCount)
 	}
 
 	c.JSON(200, gin.H{
@@ -84,4 +84,3 @@ func ShowOrder(c *gin.Context) {
 		},
 	})
 }
-

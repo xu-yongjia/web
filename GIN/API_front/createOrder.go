@@ -1,7 +1,6 @@
 package api1
 
 import (
-	"fmt"
 	"gintest/DBstruct"
 
 	"github.com/gin-gonic/gin"
@@ -53,7 +52,6 @@ func CreateOrder(c *gin.Context) {
 			}
 		}
 		for _, new := range newOrderRecords {
-			fmt.Print(new)
 			DBstruct.DB.Create(&new)
 		}
 		if e = DBstruct.DB.Delete(DBstruct.Cart{}, m.TargetCarts).Error; e == nil {
