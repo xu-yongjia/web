@@ -17,7 +17,7 @@ type orderJson struct {
 	Num          int       `json:"product_num"`   //下单的数量
 	UserPhone    string    `json:"user_phone"`    //下单用户的电话，从address数据库中获取
 	Status       string    `json:"order_state"`   //"未支付"“已支付”“送餐中”“已送达”
-	Canteen      int       `json:"canteen"`       //订单属于哪个食堂
+	CanteenID    int       `json:"canteen_id"`    //订单属于哪个食堂
 	DeliverID    int       `json:"deliver_id"`    //配送员编号
 	DeliverName  string    `json:"deliver_name"`  //配送员姓名
 	DeliverPhone string    `json:"deliver_phone"` //配送员电话
@@ -42,7 +42,7 @@ func getJsonOrder(src DBstruct.Order) (orderJson, error) {
 		UserId:       src.UserId,
 		Address:      src.Address,
 		UserPhone:    src.UserPhone,
-		Canteen:      src.Canteen,
+		CanteenID:    src.CanteenID,
 		DeliverID:    src.DeliverID,
 		DeliverName:  src.DeliverName,
 		DeliverPhone: src.DeliverPhone,

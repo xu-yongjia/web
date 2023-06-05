@@ -44,7 +44,7 @@ func CreateOrder(c *gin.Context) {
 					Num:       cartRecord.Number,
 					UserPhone: m.UserPhone,
 					Status:    "未支付",
-					Canteen:   cartRecord.CanteenID,
+					CanteenID: cartRecord.CanteenID,
 				}
 				newOrderRecords = append(newOrderRecords, newOrderRecord) //1.不要直接修改数据库，后面可能因为食堂id不唯一而出错；2.别用冒等，作用域不同
 			} else {

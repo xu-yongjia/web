@@ -13,7 +13,7 @@ type Order struct {
 	Num          int    //下单的数量
 	UserPhone    string //下单用户的电话，从address数据库中获取
 	Status       string //“未支付”“已支付”“送餐中”“已送达”
-	Canteen      int    //订单属于哪个食堂
+	CanteenID    int    //订单属于哪个食堂
 	DeliverID    int    //配送员编号
 	DeliverName  string //配送员姓名
 	DeliverPhone string //配送员电话
