@@ -13,6 +13,7 @@ type PaginationRequest struct {
 
 type AddressDisplay struct {
 	ID       uint   `json:"id"`
+	UserID   uint   `json:"user_id"` // Add this line
 	UserName string `json:"user_name"`
 	Phone    string `json:"phone"`
 	Address  string `json:"address"`
@@ -48,6 +49,7 @@ func ShowUser(c *gin.Context) {
 		for _, address := range addresses {
 			var addressDisplay AddressDisplay
 			addressDisplay.ID = address.ID
+			addressDisplay.UserID = user.ID
 			addressDisplay.UserName = address.UserName
 			addressDisplay.Phone = address.Phone
 			addressDisplay.Address = address.Address
