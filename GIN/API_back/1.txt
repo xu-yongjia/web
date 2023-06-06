@@ -263,28 +263,40 @@
     "canteen_id":2,
     "status":"已支付"
 }
-{
+{//参考思路：按照order_id升序进行查找并将结果储存在slice中，遍历slice，每次遇到一个新的order_id，就将order_id created_at updated_at user_name user_id address user_phone status canteen_id deliver_id deliver_name deliver_phone保存在变量中，
+//直到遇到下一个不同的order_id或没有下一条order记录前，将遍历到的每条order记录，按照外键product_id在product表查找其详细信息并append到order_productlist切片中（需要序列化）
+//遇到下一个不同的order_id或没有下一跳order记录时，将上面存储的变量和order_productlist组合成一个orderlist存储的元素，并append到orderlist
+//遍历完成后，返回信息
     "msg":"OK",
     "status":200,
     "data":{
         "count":30//具有该canteen_id和该status的记录总数，用于给前端计算页数
-        "orderlist":[//“已支付”和“送餐中”按照updated_at从早到晚排序
+        "orderlist":[
             {
-                "id":123,
+                "order_id":123,
+                //因为同一order_id的订单是同时下单产生，同时发餐的，所以下面两个时间属性相同
                 "created_at":"2023.6.4 12:23:34",//gorm.Model.CreatedAt字段，时间的格式会稍有不同
                 "updated_at":"2023.6.4 12.34.56",//gorm.Model.UpdatedAt字段
-                "order_id":45,//可能有多条orderlist是同一次下单产生，具有相同的OrderID,而ID不同
-                "user_name":"小明"//这个是address表的username而不是user表的username
+                //因为下单时使用的是同一address记录，所以下面属性也相同
+                "user_name":"小明"//这个是address表的username
                 "user_id":123456//这个是user表的id
-                "address":"榕11",
-                "product_id":23,
-                "num":3,//下单的份数
-                "user_phone":"153333333333",
+                "address":"榕11",//这个是address表的address
+                "user_phone":"153333333333",//这个是address表的phone
+                //因为发餐等操作也是以订单为单位的，所以以下属性也相同
                 "status":"已支付",
                 "canteen_id":2,
                 "deliver_id":45,
                 "deliver_name":"张三",
                 "deliver_phone":"12332112345"
+                "order_productlist":[
+                    {
+                        "id":123,//order表的主键，不是order_id
+                        "product_id":23,
+                        "product_name":"番茄鸡蛋"
+                        "imgpath":"https://alib..."
+                        "num":3,//下单的份数
+                    }
+                ]
             }
         ]
     }
