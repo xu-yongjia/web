@@ -66,14 +66,17 @@
     "page":2,
     "num_each_page":15,
     "canteen_number":1//是哪个食堂负责配送的员工
+    //返回truename或id匹配的记录，如果为空，则不限制
+    "truename_or_id":"李华"//先单独限制truename进行查找，然后单独限制id（因为参数是字符串类型，需要在后端转为整形再查找）进行查找，合并两次查找的结果
 }
 {
     "status":"200",
     "msg":"OK",
     "data":{
-        "count":20,//该食堂所有配送员工的总记录数，用于让前端计算页数
+        "count":1,//不限制truename或id时，是该食堂所有配送员工的总记录数。限制truename或id时，是匹配的结果总数，用于让前端计算页数
         "deliverlist":[//一个列表，在deliver表中按照“page”和“num_each_page”所指定的范围进行查找，页号从1开始
             {
+                "deliver_id":123//注意与数据库中的字段名（id）不同，需要序列化
                 "truename":"李华",
                 "phone":"12332112345"
                 "canteen_number":1,
@@ -87,7 +90,7 @@
 //如果希望改为每次进行增删改时，在返回报文中携带新的列表数据（前台习惯实现方式），请告知我
 删除：
 {
-    "deliver_id":5,
+    "deliver_id":[5,6,7],
 }
 {
     "status":200,
