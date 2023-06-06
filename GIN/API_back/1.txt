@@ -65,7 +65,7 @@
 {
     "page":2,
     "num_each_page":15,
-    "canteen_number":1//是哪个食堂负责配送的员工
+    "canteen_id":1//是哪个食堂负责配送的员工
     //返回truename或id匹配的记录，如果为空，则不限制
     "truename_or_id":"李华"//先单独限制truename进行查找，然后单独限制id（因为参数是字符串类型，需要在后端转为整形再查找）进行查找，合并两次查找的结果
 }
@@ -79,7 +79,7 @@
                 "deliver_id":123//注意与数据库中的字段名（id）不同，需要序列化
                 "truename":"李华",
                 "phone":"12332112345"
-                "canteen_number":1,
+                "canteen_id":1,
                 //active字段暂时废弃不用
             }
         ]
@@ -102,7 +102,6 @@
     "canteen_id":1,
     "truename":"李华",
     "phone":"12332112345"
-    "canteen_number":1,
 }
 {//向数据库插入记录，id由数据库自动分配（是自增主键）
     "status":200,
@@ -114,7 +113,7 @@
     "deliver_id":123,
     "truename":"李华",
     "phone":"12332112345",
-    "canteen_number":1,
+    "canteen_id":1,
 }
 {//更新数据库中具有该“deliver_id”的记录
     "status":200,
