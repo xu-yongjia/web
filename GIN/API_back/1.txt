@@ -248,16 +248,7 @@
     "status":"200",
     "data":{}
 }//可能的错误：“有未完成的该商品订单，删除失败”
-7.上传菜品图片
-{
-    "product_id":123,
-    "type":"大图"//或者“小图”
-}
-{
-    请参照已放在API_back的“uploadImg.go”文件，稍作修改即可使用，具体用法我也不清楚，未测试过，届时自己调试
-    大图需要将图片在云端的url保存到product表中具有指定product_id的记录的img_path字段中
-    小图需要将图片在云端的url保存到数据表product_img中
-}
+7.无
 8.订单显示
 //暂不考虑显示图片等不在order表中的信息
 {//status将查询结果限制为特定状态的order记录，如果status为空，则查找并返回所有记录
@@ -315,11 +306,38 @@
     "status":200,
     "data":{}
 }
-10.上传轮播图
-//具体的参数可能需要更多，但这里只给必须注意的
-{
-    "canteen_id":1
+10.获取图片的云存储空间
+{//不需要操作数据库
+    "filename":"123.png"
 }
 {
-    将图片上传到云端，将url替换到category表中具有该canteen_id的记录上（如果之前没有该canteen_id的记录，则新建记录）
+    "status":200,
+    "msg":"OK",
+    "data":{
+        "get":"http://....",
+        "put":"http://....",
+        "key":"......"
+    }
+}
+11.保存菜品图片路径
+{//将所有small_url加上product_id保存到product_img表；按照product_id找到product表中记录并保存big_url到其ImgPath字段
+    "product_id":123,
+    "canteen_id":1
+    "big_url":"http://...",
+    "small_urls":["http://...","http://...","http://..."]
+}
+{
+    "msg":"OK",
+    "status":200,
+    "data":{}
+}
+12.保存轮播图图片路径
+{//按照“canteen_id”找到canteen记录，将carousel_url保存到其ImgPath字段
+    "canteen_id":2,
+    "carousel_url":"http://..."
+}
+{
+    "msg":"OK",
+    "status":200,
+    "data":{}
 }
