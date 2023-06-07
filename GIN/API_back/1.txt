@@ -264,8 +264,8 @@
     "page":3,
     "num_each_page":15,
     "canteen_id":2,
-    "status":"已支付"
-    "search order id":2222//为零则不限制
+    "status":"已支付",
+    "search_order_id":1
 }
 {//参考思路：按照order_id升序进行查找并将结果储存在slice中，遍历slice，每次遇到一个新的order_id，就将order_id created_at updated_at user_name user_id address user_phone status canteen_id deliver_id deliver_name deliver_phone保存在变量中，
 //直到遇到下一个不同的order_id或没有下一条order记录前，将遍历到的每条order记录，按照外键product_id在product表查找其详细信息并append到order_productlist切片中（需要序列化）
