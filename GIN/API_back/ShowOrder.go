@@ -101,15 +101,18 @@ func ShowOrder(c *gin.Context) {
 		// Add order product to order's product list
 		orderDisplay.OrderProductList = append(orderDisplay.OrderProductList, orderProduct)
 	}
-	orderDisplays = append(orderDisplays, orderDisplay)
-
+	if orderDisplay.OrderID != 0 {
+		orderDisplays = append(orderDisplays, orderDisplay)
+	}
 	var totalCount int
 	if pagination.Status != "" {
 		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status).Count(&totalCount)
 	} else {
 		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ?", pagination.CanteenId).Count(&totalCount)
 	}
-
+	if pagination.SearchOrderID != 0 {
+		totalCount = len(orderDisplays)
+	}
 	c.JSON(200, gin.H{
 		"msg":    "OK",
 		"status": 200,
