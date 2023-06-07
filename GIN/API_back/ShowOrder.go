@@ -17,10 +17,11 @@ type OrderProduct struct {
 }
 
 type PaginationOrderRequest struct {
-	Page        int    `json:"page"`
-	NumEachPage int    `json:"num_each_page"`
-	CanteenId   int    `json:"canteen_id"`
-	Status      string `json:"status"`
+	Page          int    `json:"page"`
+	NumEachPage   int    `json:"num_each_page"`
+	CanteenId     int    `json:"canteen_id"`
+	Status        string `json:"status"`
+	SearchOrderID uint64 `json:"search_order_id"`
 }
 
 type OrderDisplay struct {
@@ -49,9 +50,17 @@ func ShowOrder(c *gin.Context) {
 
 	var orders []DBstruct.Order
 	if pagination.Status != "" {
-		DBstruct.DB.Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
+		query := DBstruct.DB.Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status)
+		if pagination.SearchOrderID != 0 {
+			query = query.Where("order_id = ?", pagination.SearchOrderID)
+		}
+		query.Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
 	} else {
-		DBstruct.DB.Where("canteen_id = ?", pagination.CanteenId).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
+		query := DBstruct.DB.Where("canteen_id = ?", pagination.CanteenId)
+		if pagination.SearchOrderID != 0 {
+			query = query.Where("order_id = ?", pagination.SearchOrderID)
+		}
+		query.Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
 	}
 
 	var orderDisplays []OrderDisplay
