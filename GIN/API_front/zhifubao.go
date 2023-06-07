@@ -21,10 +21,10 @@ const (
 	//应用号（APPID)
 	kAppId = "2021000122694478"
 	//应用私钥，在支付宝-控制台-沙箱-加密-开发信息-接口加签模式-证书模式-查看，复制后黏贴到这里
-	kPrivateKey = "MIIEpAIBAAKCAQEAyZMA4UNDthsHLOEG5lAYtioN+RTM7vAbHV9Ud9UnI6vhEvmXQzNYN4Vz9jKbsDzFZoZSAbe2e65zyVkn/vLFXQY2AnstoMnPu0rzLT3gCuREOeTAtsFF3riBf40jTubov0UukSp1+mehQuhsicH8bu+QyoFTDxhA7KdSm3eCG0/RhQiHPFtCJYGJKMjf9/NWpYkdqF//ugS3zzVnftB5tDdEXWmUbYXRocnfjqtUGDuXknTXOWXO2hhihU8feyLIwmwxlz3CCCBn1xjIAJXRGk7sdxEhUgWQ3a3cLPXnwchKaVpfLOgl1Lc+Sj9mhLpCB5+IUc9uxL4GyKxkd89itQIDAQABAoIBABlZpXiu7usOBx77xdRdKl5ud4dluEgsZhyRipvvcJap3Qp33TAUWvnQjL7fqnjFi8XTCqkwo4B2dhVSYxdLDMsgJta1Cw33k2poiKCd8XktL+9f92SEdfcGmTKjW1dm7spvNuYGwwOU2NEDTfMdNFP3SOxOy1VQpYmdmWP36aLpc7otjlsY+tw6ys4jby/sVAtxCGOT0edmxTFGuTSNwKRtjSoyZGe/O83HHWuyf0txkT6FcC9Yb5jPnTnAgLbmR59xWVuIkm4VUJaWvJyd1Gtzr5GnycHJWe4OfiBCoahKERbf94MMGv95V305Rq6XzmVmU9rJFpG7OcwUSJCNX8ECgYEA5Xxdda/h2FGdzykZx5N1IFtNsm+DN+PPP5Q9o068GSW/I8PbWCzTNAEV+8CX4bAhKFJxPfNQ4h8cNyH0Tm/t2iFqtSvTpCbttnz68l1U8x5SAfBkKAyKotzMO9QMZxtZa1OVfJQqbkWmozKB+QJsIobWmtY28sLP41ymsuZx3ikCgYEA4N0U5+hPPBG16U5STsSrz0z+e8oYLyr7nd/G7Kajd2lQoZINgJTSEBXFnoPYFzcQKcvTrn6nkBHK2Cp14wPoYg7eDWHZn/C8dLmeA8Bf1U9J6gywuB6ur2duA4fqAIdByn5o7yz5Kk8hyIwxWSMu2HYjxYEoQIhN0bFI04WgWa0CgYEAnmVX0OpkVT4IUbvJunIyLvI2T8oeZQ5Nt1GntbebpzPhmVsPY+4UnVl+hfTqIHHEgSNeXGc8VccpX3iFOzqQjrXwBDrK6wufmgzr3SvEfcZYzlPRnb8CVeVW5pi3MteywZzAmmteWhyjJxOumGQupSoyqE7hQHBssz75JJRg1fkCgYEArrw91aRZhhVBJgY9wYXk+Ncc3jcCKg0dr+XH3/fyCQXmqVckdOmwft1cTrynfArG3aPNX8h+D180IFyGdR2BREnHVeDWywm4eIARAVtJXSobBuxLmxgEqLsX61h/h1+TyXYHtuxcxvrtBrmiU2EaswzC6WRfUh5ZUnyQWgZ5v5UCgYBt8klPnF/iAtSFp4bNWeyKwBv651GqknQFghKDNaX5KIzrKxupwGAw8WWScXglI37WdsGnQ0IUQleZzHHYDmDzyB2l5V4J4+LmIvG0UZErBdIrgqwluTD9g93LxJuQbE/xasXXJBO6v6mpny7IZyamNP0gAkHyZ3clYcbscTs8Og=="
+	kPrivateKey = "MIIEowIBAAKCAQEAgkfE8a2B8iKEICE9l3KQQSVY6Q6WPFLtGKDBWkpFeWUZpoCsX9B4e92XxL8leCgjGw6KJ4kvbnd88/8wexqj8AF1TruCR1xd1ihvBhPkCOF18aVNBarSsLzW3qvhpwBZvPKxm+m6WgYOt8cM6pQ7VUBtbE016GIbq8qgsjPb3mxMFgL9/uq5kHV3/bWExhw4jmPSZR/6/4elB83Vh6NsN8Pu3t5cMJDByrngNAR6XOog87CS9abjQrGv4vFxvRR+S+v5vT1nCdtSSCN31YDNa30NVrnaKXng+9h8pIL2m3D6Sx+qqbL+ZL5r5cMVwT35RS0q5yiFpbUgupF76XBOAQIDAQABAoIBACylYbWcy0pqT7MfERdkeFEK9nQvvoZ/uKbW+Evz5ekbH3Yy5F+VdqSkJM2U38dUoes0yV2RIsMNibGoQzn8wC+QoF3R3myMF9A7XQjNKjls4llkV4fYqYlNvajjaFotwZMB7KHMsEMHjmWmfiOplse5Y4ZY01+Gt4rgzr8jDHclT968R2nSEdscKABnfeTU5Hzh5NBNAvsto70Ph05zIU7yR/pUr5sgE9qB3YloR8qZfnVbqTiwo/q012a4YWG4+OWiLRGgymUXtT42ikQgHMA7rZtKqASh7eZ446hNedtIQGY8nQGhRVOcwLp8QUc9eFpBe8uZVHq6Klq/gzSZiRECgYEA4WDZdWwQ5RzPPwytDMcQD7PT2PZgGi9evzabvVrOrLDE+WFC5mtuZQWtUGk+5KvVMBHqzGZ9xB1H6amze+4ejXsuxqDDoqF6A3bD4LolIikNBfDaA/kQezTGftfqZoVr6qFFE4MdVFb9WbYbaBXqVSSz32DTQ4vrVZ6KI/YRte0CgYEAk/s0Yho27O8MwzMVAPUiGSBXB9l8zk+lO+nwWtWGS3GSQ2SLslJAekMzM8emlBMSZf4HOC/2JrAitACX/wRtYQb2DC/67IVDSqtxBkrIex6Yft3Re3zRGHH+cQCMjAT9NhIvRHlqKvvqH+4aJTM+8i0Dmrt4vbHNqBUt/x7YteUCgYEAp8B6m5fQC3iiGX/J3lTcc5OZ/0eCyHqxvwlaalqIsqjwM95c+TzFcpQDKHLtyS7NA3aSmYk/2xUgTZ9uZLQcMZqaemV2uDoQoztnGIH02bRMaTuYSpS727iwdgEoCx8L8BwRWjChSAFnmbqeM578SFuFNqLPHNusUpIqqBGjpRECgYBSaf3jgPwD+qJd+A4DiYIjAjrWGU8Dy6GXe5Mr021GiQrPU6jleB+Gt/RFKzTflLuTZ+V3amapZ0D8hLQiB8Iu3mSbpwEVRqaSaGa6/V0oDIMbbMglAP+moJ33KzobJRAsU/ZVKVVyePgMLlwLSb4Nu/oc67mz09lYeeszAWfp7QKBgGycHccJ2x2/oNB1nZqjKbgrVvtE7cJIlug6pxSdp0oVhLWU0vSkjcEIciTRiarWQ7OESb47y25eErEv4v9Mo2iRAalYwPn6QJPW/bvo/u2HnbF+Hi+0b8etqstQ9WQGUNwzRmZ3A90z9GLJxf551WIqx3dAnR9cpXhzBgXzxSTC"
 	kServerPort = "9989"
 	//设置回调地址域名，将内网穿透的URL放到这里
-	kServerDomain = "https://43afa151.r10.cpolar.top"
+	kServerDomain = "http://7c4b36d3.r5.cpolar.top"
 )
 
 func InitPay() {
@@ -34,7 +34,7 @@ func InitPay() {
 		log.Println("初始化支付宝失败", err)
 		return
 	}
-	err = client.SetEncryptKey("VP1UE6HugWdMaxH4IWVvVA==")
+	err = client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA==")
 	if err != nil {
 		log.Println(err)
 	}
@@ -53,7 +53,7 @@ func InitPay() {
 		return
 	}
 
-	if err = client.SetEncryptKey("FtVd5SgrsUzYQRAPBmejHQ=="); err != nil {
+	if err = client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA=="); err != nil {
 		log.Println("加载内容加密密钥发生错误", err)
 		return
 	}
@@ -93,7 +93,7 @@ func Pay(c *gin.Context) {
 		fmt.Printf("%.2f", price)
 		p.TotalAmount = fmt.Sprintf("%.2f", price) //价格（两位小数，不能为0）
 		p.ProductCode = "FAST_INSTANT_TRADE_PAY"
-		err := client.SetEncryptKey("VP1UE6HugWdMaxH4IWVvVA==") //在支付宝-控制台-沙箱-加密-开发信息-接口内容加密模式，复制后粘贴到这里
+		err := client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA==") //在支付宝-控制台-沙箱-加密-开发信息-接口内容加密模式，复制后粘贴到这里
 		if err != nil {
 			log.Println(err)
 		}
