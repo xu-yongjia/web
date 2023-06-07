@@ -15,4 +15,5 @@ type Product struct {
 	DiscountPrice string `json:"product_price"`                  //折后价
 	Title         string
 	Score         string
+	Sales         int //销售量
 }
