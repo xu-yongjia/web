@@ -173,8 +173,9 @@ func GetOrder(c *gin.Context) {
 		// Add order product to order's product list
 		orderDisplay.OrderProductList = append(orderDisplay.OrderProductList, orderProduct)
 	}
-	orderDisplays = append(orderDisplays, orderDisplay)
-
+	if orderDisplay.OrderID != 0 {
+		orderDisplays = append(orderDisplays, orderDisplay)
+	}
 	var totalCount int
 	if pagination.Status != "" {
 		DBstruct.DB.Model(&DBstruct.Order{}).Where("user_id = ? AND status = ?", pagination.UserID, pagination.Status).Count(&totalCount)
