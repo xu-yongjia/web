@@ -127,12 +127,16 @@
     "canteen_id":1
 }
 {
-    "category_list":[
-        {
-            "category_id":123,
-            "category_name":"烧卤",
-        }
-    ]
+    "status":200,
+    "msg":"OK",
+    "data":{
+        "category_list":[
+            {
+                "category_id":123,
+                "category_name":"烧卤",
+            }
+        ]
+    }
 }
 //同样的，需要重新请求类别列表，如想用其他实现方式请告知我
 增加分类：
