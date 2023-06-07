@@ -9,4 +9,5 @@ type User struct {
 	//User_id  int    `json:"user_id" gorm:"primary_key"`
 	UserName string `json:"username" gorm:"unique"`
 	Password string `json:"-"`
+	avatar   string //头像的url
 }
