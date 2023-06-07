@@ -1,6 +1,12 @@
 package DBstruct
 
-import "github.com/jinzhu/gorm"
+import (
+	"os"
+
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+
+	"github.com/jinzhu/gorm"
+)
 
 // password不会被json传输，这样客户端在登录之后，不会有密码的缓存，相对安全（人走开后被偷看密码和修改密码）
 type User struct {
@@ -9,5 +15,16 @@ type User struct {
 	//User_id  int    `json:"user_id" gorm:"primary_key"`
 	UserName string `json:"username" gorm:"unique"`
 	Password string `json:"-"`
-	avatar   string //头像的url
+	Avatar   string `json:"avatar"` //头像的url
+}
+
+// AvatarURL 头像地址
+func (user *User) AvatarURL() string {
+	client, _ := oss.New(os.Getenv("OSS_END_POINT"), os.Getenv("OSS_ACCESS_KEY_ID"), os.Getenv("OSS_ACCESS_KEY_SECRET"))
+	bucket, _ := client.Bucket(os.Getenv("OSS_BUCKET"))
+	signedGetURL, _ := bucket.SignURL(user.Avatar, oss.HTTPGet, 24*60*60)
+	//if strings.Contains(signedGetURL, "http://ailiaili-img-av.oss-cn-hangzhou.aliyuncs.com/?Exp") {
+	//signedGetURL := "https://ailiaili-img-av.oss-cn-hangzhou.aliyuncs.com/img/noface.png"
+	//}
+	return signedGetURL
 }
