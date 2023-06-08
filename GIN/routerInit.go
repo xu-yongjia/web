@@ -147,6 +147,8 @@ func NewRouter() *gin.Engine {
 			authed2.POST("admin/showOrder", api2.ShowOrder)
 			// 	// 指派配送员
 			authed2.POST("admin/assignDelivery", api2.AssignDelivery)
+			// 请求图片空间
+			 authed2.POST("admin/uploadImg", api2.UploadToken)
 			// 		//商品操作
 			// 		authed2.POST("products", api2.CreateProduct)
 			// 		authed2.DELETE("products/:id", api2.DeleteProduct)
