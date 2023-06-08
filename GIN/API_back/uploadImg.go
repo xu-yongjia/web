@@ -1,108 +1,91 @@
 package api2
 
 import (
-	"fmt"
-	"gintest/pkg/e"
-	"mime"
+	
 	"os"
 	"path/filepath"
+	"mime"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
+// Responsestruct represents the structure of the response that this service returns.
 type Responsestruct struct {
 	Status int         `json:"status"`
 	Data   interface{} `json:"data"`
 	Msg    string      `json:"msg"`
-	Error  string      `json:"error"`
 }
 
-// UploadToken 上传授权
+// UploadToken is a function to handle the request to upload an image.
 func UploadToken(c *gin.Context) {
 	service := UploadImgService{}
-	if err := c.ShouldBind(&service); err == nil {
+	if err := c.ShouldBindJSON(&service); err == nil {
 		res := service.Post()
 		c.JSON(200, res)
 	} else {
-		c.JSON(201, ERRRESPONSE(err.Error(), 201))
-		// logging.Info(err)
+		c.JSON(200, Responsestruct{
+			Status: 201,  // Status code for request error
+			Msg:    "json参数格式有误",
+			Data:   map[string]string{},
+		})
 	}
 }
 
-// UploadAvatarService 获得上传oss token的服务
+// UploadImgService is a service that provides a method to upload an image.
 type UploadImgService struct {
-	Filename string `form:"filename" json:"filename"`
+	Filename string `json:"filename"`
 }
 
-// Post 创建token
+// Post is a method to handle the image upload.
 func (service *UploadImgService) Post() Responsestruct {
-	code := e.SUCCESS
 	client, err := oss.New(os.Getenv("OSS_END_POINT"), os.Getenv("OSS_ACCESS_KEY_ID"), os.Getenv("OSS_ACCESS_KEY_SECRET"))
 	if err != nil {
-		// logging.Info(err)
-		code = e.ERROR_OSS
 		return Responsestruct{
-			Status: code,
-			Msg:    e.GetMsg(code),
-			Error:  err.Error(),
+			Status: 404,
+			Msg:    "token鉴权失败",
+			Data:   map[string]string{},
 		}
 	}
 
-	// 获取存储空间。
 	bucket, err := client.Bucket(os.Getenv("OSS_BUCKET"))
-	fmt.Printf("bucket: %v\n", bucket) //debug
 	if err != nil {
-		// logging.Info(err)
-		code = e.ERROR_OSS
 		return Responsestruct{
-			Status: code,
-			Msg:    e.GetMsg(code),
-			Error:  err.Error(),
+			Status: 404,
+			Msg:    "token鉴权失败",
+			Data:   map[string]string{},
 		}
 	}
 
-	// 获取扩展名
 	ext := filepath.Ext(service.Filename)
-	fmt.Printf("ext: %v\n", ext)
 
-	// 带可选参数的签名直传。
 	options := []oss.Option{
 		oss.ContentType(mime.TypeByExtension(ext)),
 	}
 
 	key := "upload/avatar/" + uuid.Must(uuid.NewRandom()).String() + ext
-	fmt.Printf("key: %v\n", key) //debug
-	// 签名直传。
 	signedPutURL, err := bucket.SignURL(key, oss.HTTPPut, 600, options...)
-	fmt.Printf("signedPutURL: %v\n", signedPutURL) //debug
 	if err != nil {
-		// logging.Info(err)
-		code = e.ERROR_OSS
 		return Responsestruct{
-			Status: code,
-			Msg:    e.GetMsg(code),
-			Error:  err.Error(),
+			Status: 404,
+			Msg:    "token鉴权失败",
+			Data:   map[string]string{},
 		}
 	}
 
-	// 查看图片
 	signedGetURL, err := bucket.SignURL(key, oss.HTTPGet, 600)
-	fmt.Printf("signedGetURL: %v\n", signedGetURL) //debug
 	if err != nil {
-		// logging.Info(err)
-		code = e.ERROR_OSS
 		return Responsestruct{
-			Status: code,
-			Msg:    e.GetMsg(code),
-			Error:  err.Error(),
+			Status: 404,
+			Msg:    "token鉴权失败",
+			Data:   map[string]string{},
 		}
 	}
 
 	return Responsestruct{
-		Status: code,
-		Msg:    e.GetMsg(code),
+		Status: 200,
+		Msg:    "OK",
 		Data: map[string]string{
 			"key": key,
 			"put": signedPutURL,
@@ -110,5 +93,3 @@ func (service *UploadImgService) Post() Responsestruct {
 		},
 	}
 }
-
-// DataList 带有总数的Data结构
