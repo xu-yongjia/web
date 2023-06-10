@@ -149,6 +149,9 @@ func NewRouter() *gin.Engine {
 			authed2.POST("admin/assignDelivery", api2.AssignDelivery)
 			// 请求图片空间
 			 authed2.POST("admin/uploadImg", api2.UploadToken)
+			 //保存轮播图片路径
+			 authed2.POST("admin/save_carousel_url", api2.SaveCarouselURL)
+
 			// 		//商品操作
 			// 		authed2.POST("products", api2.CreateProduct)
 			// 		authed2.DELETE("products/:id", api2.DeleteProduct)
