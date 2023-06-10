@@ -2,6 +2,7 @@ package main
 
 import (
 	api2 "gintest/API_back"
+	"gintest/API_back/api"
 	api1 "gintest/API_front"
 	"gintest/middleware"
 
@@ -11,26 +12,26 @@ import (
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 
-	//r.Use(middleware.Cors())
+	// r.Use(middleware.Cors())
 	// store := cookie.NewStore([]byte(sdk.VERSION))
 	// r.Use(sessions.Sessions("mysession", store))
 	// 路由
 
 	v1 := r.Group("/api/v1/")
 	{
-		//商品详情
+		// 商品详情
 		v1.POST("product/getDetails", api1.ShowProduct)
-		//获取菜品图片url
+		// 获取菜品图片url
 		v1.POST("product/getDetailspicture", api1.ShowProductImgs)
-		//获取评论
+		// 获取评论
 		v1.POST("product/getDetailsComment", api1.ListComments)
-		//获取评分排行榜
+		// 获取评分排行榜
 		v1.POST("rankings", api1.ListRanking)
-		//获取有哪些菜品类别
+		// 获取有哪些菜品类别
 		v1.POST("categories", api1.ListCategories)
-		//获取菜品列表
+		// 获取菜品列表
 		v1.POST("products", api1.ListProducts)
-		//轮播图
+		// 轮播图
 		v1.GET("carousels", api1.ListCarousels)
 		// 	// 用户注册
 		v1.POST("users/register", api1.RegistUser)
@@ -44,8 +45,8 @@ func NewRouter() *gin.Engine {
 		// 	v1.GET("carousels", api1.ListCarousels)
 		// 	//商品图片操作
 		// 	v1.GET("imgs/:id", api1.ShowProductImgs)
-		//商品详情图片操作
-		//v1.GET("info-imgs/:id", api.ShowInfoImgs)
+		// 商品详情图片操作
+		// v1.GET("info-imgs/:id", api.ShowInfoImgs)
 		// 	//商品参数图片操作
 		// 	v1.GET("param-imgs/:id", api1.ShowParamImgs)
 		// 	//分类操作
@@ -73,9 +74,9 @@ func NewRouter() *gin.Engine {
 		{
 			authed.POST("payments", api1.Pay)
 			authed.POST("createOrder", api1.CreateOrder)
-			//获取购物车
+			// 获取购物车
 			authed.POST("getCart", api1.GetCart)
-			//获取订单
+			// 获取订单
 			authed.POST("getorder", api1.GetOrder)
 			// 		//验证token
 			// 		authed.GET("ping", api1.CheckToken)
@@ -85,7 +86,7 @@ func NewRouter() *gin.Engine {
 			// 		// 上传操作
 			// 		authed.POST("avatar", api1.UploadToken)
 			// 		//收藏夹操作
-			//提交评论
+			// 提交评论
 			authed.POST("comment", api1.CreateComment)
 			authed.POST("collect/addCollect", api1.AddCollect)
 			// 		authed.GET("favorites/:id", api1.ShowFavorites)
@@ -138,7 +139,7 @@ func NewRouter() *gin.Engine {
 		// 	v2.GET("categories", api2.ListCategories)
 		authed2 := v2.Group("/")
 		// 	//登录验证
-		authed2.Use(middleware.JWT())
+		// authed2.Use(middleware.JWT())
 		{ // 上传操作
 			authed2.POST("avatar", api2.UploadToken)
 			// 	// 查看用户信息
@@ -164,6 +165,24 @@ func NewRouter() *gin.Engine {
 			// 		//公告操作
 			// 		authed2.POST("notices", api2.CreateNotice)
 			// 		authed2.PUT("notices", api2.UpdateNotice)
+
+			authed2.POST("admin/delivery/list", api.GetDeliveryList)
+
+			authed2.POST("admin/delivery/add", api.AddDelivery)
+			authed2.POST("admin/delivery/update", api.UpdateDelivery)
+			authed2.POST("admin/delivery/del", api.DelDelivery)
+
+			authed2.POST("admin/category/list", api.GetCategoryList)
+			authed2.POST("admin/category/add", api.AddCategory)
+			authed2.POST("admin/category/update", api.UpdateCategory)
+			authed2.POST("admin/category/hasDel", api.HasDelCategory)
+			authed2.POST("admin/category/del", api.DelCategory)
+
+			authed2.POST("admin/product/list", api.GetProductList)
+			authed2.POST("admin/product/add", api.AddProduct)
+			authed2.POST("admin/product/update", api.UpdateProduct)
+			authed2.POST("admin/product/del", api.DelProduct)
+			authed2.POST("admin/product/photo/add", api.SavePhoto)
 		}
 	}
 	return r
