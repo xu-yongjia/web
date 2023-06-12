@@ -139,9 +139,9 @@ func NewRouter() *gin.Engine {
 		// 	v2.GET("categories", api2.ListCategories)
 		authed2 := v2.Group("/")
 		// 	//登录验证
-		// authed2.Use(middleware.JWT())
+		authed2.Use(middleware.JWT())
 		{ // 上传操作
-			authed2.POST("avatar", api2.UploadToken)
+			authed2.POST("admin/generateurl", api2.UploadToken)
 			// 	// 查看用户信息
 			authed2.POST("admin/showUser", api2.ShowUser)
 			// 	// 查看订单信息
@@ -149,11 +149,11 @@ func NewRouter() *gin.Engine {
 			// 	// 指派配送员
 			authed2.POST("admin/assignDelivery", api2.AssignDelivery)
 			// 请求图片空间
-			 authed2.POST("admin/uploadImg", api2.UploadToken)
-			 //保存轮播图片路径
-			 authed2.POST("admin/save_carousel_url", api2.SaveCarouselURL)
-			 //显示配送员
-			 authed2.POST("admin/show_delivery", api2.ShowDelivery)
+			authed2.POST("admin/uploadImg", api2.UploadToken)
+			//保存轮播图片路径
+			authed2.POST("admin/saveCarouselUrl", api2.SaveCarouselURL)
+			//显示配送员
+			authed2.POST("admin/showDelivery", api2.ShowDelivery)
 
 			// 		//商品操作
 			// 		authed2.POST("products", api2.CreateProduct)
@@ -173,7 +173,7 @@ func NewRouter() *gin.Engine {
 			// 		authed2.POST("notices", api2.CreateNotice)
 			// 		authed2.PUT("notices", api2.UpdateNotice)
 
-			authed2.POST("admin/delivery/list", api.GetDeliveryList)
+			//authed2.POST("admin/delivery/list", api.GetDeliveryList)
 
 			authed2.POST("admin/delivery/add", api.AddDelivery)
 			authed2.POST("admin/delivery/update", api.UpdateDelivery)

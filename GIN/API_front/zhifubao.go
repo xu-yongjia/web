@@ -24,7 +24,7 @@ const (
 	kPrivateKey = "MIIEowIBAAKCAQEAgkfE8a2B8iKEICE9l3KQQSVY6Q6WPFLtGKDBWkpFeWUZpoCsX9B4e92XxL8leCgjGw6KJ4kvbnd88/8wexqj8AF1TruCR1xd1ihvBhPkCOF18aVNBarSsLzW3qvhpwBZvPKxm+m6WgYOt8cM6pQ7VUBtbE016GIbq8qgsjPb3mxMFgL9/uq5kHV3/bWExhw4jmPSZR/6/4elB83Vh6NsN8Pu3t5cMJDByrngNAR6XOog87CS9abjQrGv4vFxvRR+S+v5vT1nCdtSSCN31YDNa30NVrnaKXng+9h8pIL2m3D6Sx+qqbL+ZL5r5cMVwT35RS0q5yiFpbUgupF76XBOAQIDAQABAoIBACylYbWcy0pqT7MfERdkeFEK9nQvvoZ/uKbW+Evz5ekbH3Yy5F+VdqSkJM2U38dUoes0yV2RIsMNibGoQzn8wC+QoF3R3myMF9A7XQjNKjls4llkV4fYqYlNvajjaFotwZMB7KHMsEMHjmWmfiOplse5Y4ZY01+Gt4rgzr8jDHclT968R2nSEdscKABnfeTU5Hzh5NBNAvsto70Ph05zIU7yR/pUr5sgE9qB3YloR8qZfnVbqTiwo/q012a4YWG4+OWiLRGgymUXtT42ikQgHMA7rZtKqASh7eZ446hNedtIQGY8nQGhRVOcwLp8QUc9eFpBe8uZVHq6Klq/gzSZiRECgYEA4WDZdWwQ5RzPPwytDMcQD7PT2PZgGi9evzabvVrOrLDE+WFC5mtuZQWtUGk+5KvVMBHqzGZ9xB1H6amze+4ejXsuxqDDoqF6A3bD4LolIikNBfDaA/kQezTGftfqZoVr6qFFE4MdVFb9WbYbaBXqVSSz32DTQ4vrVZ6KI/YRte0CgYEAk/s0Yho27O8MwzMVAPUiGSBXB9l8zk+lO+nwWtWGS3GSQ2SLslJAekMzM8emlBMSZf4HOC/2JrAitACX/wRtYQb2DC/67IVDSqtxBkrIex6Yft3Re3zRGHH+cQCMjAT9NhIvRHlqKvvqH+4aJTM+8i0Dmrt4vbHNqBUt/x7YteUCgYEAp8B6m5fQC3iiGX/J3lTcc5OZ/0eCyHqxvwlaalqIsqjwM95c+TzFcpQDKHLtyS7NA3aSmYk/2xUgTZ9uZLQcMZqaemV2uDoQoztnGIH02bRMaTuYSpS727iwdgEoCx8L8BwRWjChSAFnmbqeM578SFuFNqLPHNusUpIqqBGjpRECgYBSaf3jgPwD+qJd+A4DiYIjAjrWGU8Dy6GXe5Mr021GiQrPU6jleB+Gt/RFKzTflLuTZ+V3amapZ0D8hLQiB8Iu3mSbpwEVRqaSaGa6/V0oDIMbbMglAP+moJ33KzobJRAsU/ZVKVVyePgMLlwLSb4Nu/oc67mz09lYeeszAWfp7QKBgGycHccJ2x2/oNB1nZqjKbgrVvtE7cJIlug6pxSdp0oVhLWU0vSkjcEIciTRiarWQ7OESb47y25eErEv4v9Mo2iRAalYwPn6QJPW/bvo/u2HnbF+Hi+0b8etqstQ9WQGUNwzRmZ3A90z9GLJxf551WIqx3dAnR9cpXhzBgXzxSTC"
 	kServerPort = "9989"
 	//设置回调地址域名，将内网穿透的URL放到这里
-	kServerDomain = "http://7c4b36d3.r5.cpolar.top"
+	kServerDomain = "http://45c212a1.r5.cpolar.top"
 )
 
 func InitPay() {
@@ -34,10 +34,10 @@ func InitPay() {
 		log.Println("初始化支付宝失败", err)
 		return
 	}
-	err = client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA==")
-	if err != nil {
-		log.Println(err)
-	}
+	// err = client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA==")
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 	// 加载证书
 	//在支付宝-控制台-沙箱-加密-开发信息-接口加签模式-证书模式-查看，可以下载三份证书，分别放到cert文件夹中
 	if err = client.LoadAppCertPublicKeyFromFile("cert/appPublicCert.crt"); err != nil {
@@ -93,10 +93,10 @@ func Pay(c *gin.Context) {
 		fmt.Printf("%.2f", price)
 		p.TotalAmount = fmt.Sprintf("%.2f", price) //价格（两位小数，不能为0）
 		p.ProductCode = "FAST_INSTANT_TRADE_PAY"
-		err := client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA==") //在支付宝-控制台-沙箱-加密-开发信息-接口内容加密模式，复制后粘贴到这里
-		if err != nil {
-			log.Println(err)
-		}
+		// err := client.SetEncryptKey("yhL/DROt5T1GJubzpHy2eA==") //在支付宝-控制台-沙箱-加密-开发信息-接口内容加密模式，复制后粘贴到这里
+		// if err != nil {
+		// 	log.Println(err)
+		// }
 		url, _ := client.TradePagePay(p)
 		fmt.Print(url.String())
 		c.Redirect(http.StatusTemporaryRedirect, url.String())

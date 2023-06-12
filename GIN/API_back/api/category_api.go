@@ -4,6 +4,7 @@ import (
 	api2 "gintest/API_back"
 	"gintest/API_back/vo"
 	"gintest/DBstruct"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,13 +41,13 @@ type delParams struct {
 func GetCategoryList(c *gin.Context) {
 	var params listParams
 	if err := c.ShouldBind(&params); err != nil {
-		c.JSON(400, api2.ERRRESPONSE("数据格式错误", 201))
+		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
 	var categorys []DBstruct.Category
 	err := DBstruct.DB.Where("canteen_id = ?", params.CanteenId).Find(&categorys).Error
 	if err != nil {
-		c.JSON(200, api2.ERRRESPONSE("服务异常", 500))
+		c.JSON(201, api2.ERRRESPONSE("服务异常", 201))
 		return
 	}
 	var list []vo.CategoryList
@@ -58,17 +59,13 @@ func GetCategoryList(c *gin.Context) {
 		})
 	}
 
-	c.JSON(200, gin.H{
-		"data": gin.H{
-			"category_list": list,
-		},
-	})
+	c.JSON(200, api2.SUCCESSRESPONSE(gin.H{"category_list": list}))
 }
 
 func AddCategory(c *gin.Context) {
 	var params addCategoryParams
 	if err := c.ShouldBind(&params); err != nil {
-		c.JSON(400, api2.ERRRESPONSE("数据格式错误", 201))
+		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
 	var category DBstruct.Category
@@ -77,16 +74,16 @@ func AddCategory(c *gin.Context) {
 
 	err := DBstruct.DB.Model(&category).Create(&category).Error
 	if err != nil {
-		c.JSON(200, api2.ERRRESPONSE("服务异常", 500))
+		c.JSON(201, api2.ERRRESPONSE("服务异常", 201))
 		return
 	}
-	c.JSON(200, api2.SUCCESSRESPONSE(params))
+	c.JSON(200, api2.SUCCESSRESPONSE_NODATA())
 }
 
 func UpdateCategory(c *gin.Context) {
 	var params updateCategoryParams
 	if err := c.ShouldBind(&params); err != nil {
-		c.JSON(400, api2.ERRRESPONSE("数据格式错误", 201))
+		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
 	var category DBstruct.Category
@@ -95,39 +92,35 @@ func UpdateCategory(c *gin.Context) {
 
 	err := DBstruct.DB.Model(&category).Updates(&category).Error
 	if err != nil {
-		c.JSON(200, api2.ERRRESPONSE("服务异常", 500))
+		c.JSON(201, api2.ERRRESPONSE("服务异常", 201))
 		return
 	}
-	c.JSON(200, api2.SUCCESSRESPONSE(params))
+	c.JSON(200, api2.SUCCESSRESPONSE_NODATA())
 }
 
 func HasDelCategory(c *gin.Context) {
 	var params delParams
 	if err := c.ShouldBind(&params); err != nil {
-		c.JSON(400, api2.ERRRESPONSE("数据格式错误", 201))
+		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
 	var product DBstruct.Product
-	err := DBstruct.DB.Where("category_id = ?", params.CategoryId).First(&product).Error
-	if err != nil {
+	err := DBstruct.DB.Where("category_id = ?", params.CategoryId).First(&product).Error //查找该分类下的产品
+	if err != nil {                                                                      //如果不存在该分类下的产品，则删除
 		DBstruct.DB.Where("category_id = ?", params.CategoryId).Delete(&DBstruct.Category{})
-		c.JSON(200, api2.SUCCESSRESPONSE(gin.H{
-			"category_id": params.CategoryId,
-		}))
+		c.JSON(200, api2.SUCCESSRESPONSE_NODATA())
 		return
 	}
-	c.JSON(201, api2.SUCCESSRESPONSE("该类别中包含菜品信息，是否同步删除"))
+	c.JSON(201, api2.ERRRESPONSE("该类别中包含菜品信息，是否同步删除?", 201))
 }
 
 func DelCategory(c *gin.Context) {
 	var params delParams
 	if err := c.ShouldBind(&params); err != nil {
-		c.JSON(400, api2.ERRRESPONSE("数据格式错误", 201))
+		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
 	DBstruct.DB.Where("category_id = ?", params.CategoryId).Delete(&DBstruct.Product{})
 	DBstruct.DB.Where("category_id = ?", params.CategoryId).Delete(&DBstruct.Category{})
-	c.JSON(200, api2.SUCCESSRESPONSE(gin.H{
-		"category_id": params.CategoryId,
-	}))
+	c.JSON(201, api2.SUCCESSRESPONSE_NODATA())
 }

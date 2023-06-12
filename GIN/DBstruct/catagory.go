@@ -1,7 +1,7 @@
 package DBstruct
 
 type Category struct {
-	CategoryID   uint
+	CategoryID   uint `gorm:"primary_key"`
 	CategoryName string
-	CanteenID    uint `gorm:"primary_key"`
+	CanteenID    uint
 }

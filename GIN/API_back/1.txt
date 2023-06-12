@@ -17,6 +17,7 @@
 //无特别说明，下面每对json，第一个是请求的，第二个是返回的
 1.管理人员登录，账号/密码/食堂
 登录：
+/api1/v2/admin/login
 {
     "canteen_id":1,//将canteen_id作为主键
     "password":"123456"
@@ -26,6 +27,7 @@
 }
 以下api均需要在发送请求时在头部字段加上token
 2.用户显示
+/api1/v2/admin/showUser
 {
     "page":2,
     "num_each_page":15
@@ -62,6 +64,7 @@
 }
 
 3.配送员显示
+/api1/v2/admin/showDelivery
 {
     "page":2,
     "num_each_page":15,
@@ -89,8 +92,9 @@
 //如进行增删改的页面中需要显示配送员列表，那么为了显示变化后的配送员列表，需要页面重新发起获取配送员列表的请求
 //如果希望改为每次进行增删改时，在返回报文中携带新的列表数据（前台习惯实现方式），请告知我
 删除：
+/api1/v2/admin/delivery/del
 {
-    "deliver_id":[5,6,7],
+    "deliver_id":[5,6,7]
 }
 {
     "status":200,
@@ -98,6 +102,7 @@
     "data":{}
 }
 增加：
+/api1/v2/admin/delivery/add
 {
     "canteen_id":1,
     "truename":"李华",
@@ -109,11 +114,12 @@
     "data":{}
 }
 修改:
+/api1/v2/admin/delivery/update
 {
     "deliver_id":123,
     "truename":"李华",
     "phone":"12332112345",
-    "canteen_id":1,
+    "canteen_id":1
 }
 {//更新数据库中具有该“deliver_id”的记录
     "status":200,
@@ -122,7 +128,8 @@
 }
 //可能的错误：“记录不存在”
 5.菜品分类别显示
-查询分类：
+查询分类:
+/api1/v2/admin/category/list
 {
     "canteen_id":1
 }
@@ -134,14 +141,16 @@
             {
                 "category_id":123,
                 "category_name":"烧卤",
+                "canteen_id":1
             }
         ]
     }
 }
 //同样的，需要重新请求类别列表，如想用其他实现方式请告知我
 增加分类：
+/api1/v2/admin/category/add
 {
-    "canteen_id":1
+    "canteen_id":1,
     "category_name":"烧卤"
 }
 {//category_id是主键，自动分配
@@ -150,6 +159,7 @@
     "data":{}
 }
 删除分类：
+/api1/v2/admin/category/hasDel
 ①{
     "category_id":123
 }
@@ -158,6 +168,7 @@
     "msg":"OK"
     "data":{}
 }
+/api1/v2/admin/category/del
 ②{//上一个接口返回“该类别中包含菜品信息，是否同步删除”后，如果前端继续删除操作，则发送到这一个接口
     "category_id":123
 }
@@ -167,9 +178,10 @@
     "data":{}
 }
 修改分类：//重命名分类
+/api1/v2/admin/category/update
 {
     "category_id":123,
-    "category_name":"自选",
+    "category_name":"自选"
 }
 {//因为product中只有category_id这一个外键，所以修改category_name时不需要修改product表
     "status":200,
@@ -178,6 +190,7 @@
 }
 6.菜品增删改
 增加菜品：
+/api1/v2/admin/product/add
 {//图片不在这个接口上传
     "name":"烧鸭",
     "canteen_id":1,
@@ -193,11 +206,12 @@
     "data":{}
 }
 获取菜品：
+/api1/v2/admin/product/list
 {
     "page":3,//第几页
     "limit":15,//每页多少记录
     "canteen_id":1,//食堂id
-    "category_id":1//种类id
+    "category_id":1//种类id（为0则不限制类别）
 }
 {
     "status":200,
@@ -209,13 +223,14 @@
                 "id":123
                 "name":"烧鸭",
                 "category_id":123,
-                "category_name":"烧卤"//通过
+                "category_name":"烧卤"//通过product的categoryid外键在category数据表中查找
                 "info":"每份50g",
                 "img_path":"https://alib......",
                 "price":"5.00",
                 "discount_price":"4.50",
                 "title":"热卖！"
                 "score":"4.0"//评分是在评论时统计的，不需要商家管理，也不容许商家修改
+                "sales":53
             },
             {
                 ……………………
@@ -224,6 +239,7 @@
     }
 }
 修改菜品：
+/api1/v2/admin/product/update
 {
     "id":123,
     "name":"烧鸭",
@@ -240,6 +256,7 @@
     "data":{}
 }
 删除菜品：
+/api1/v2/admin/product/del
 {
     "product_id":123
 }
@@ -250,6 +267,7 @@
 }//可能的错误：“有未完成的该商品订单，删除失败”
 7.无
 8.订单显示
+/api1/v2/admin/showOrder
 //暂不考虑显示图片等不在order表中的信息
 {//status将查询结果限制为特定状态的order记录，如果status为空，则查找并返回所有记录
     "page":3,
@@ -290,6 +308,8 @@
                         "product_name":"番茄鸡蛋"
                         "imgpath":"https://alib..."
                         "num":3,//下单的份数
+                        "product_selling_price": "3.0",
+                        "product_price": "2.8"
                     }
                 ]
             }
@@ -297,6 +317,7 @@
     }
 }
 9.订单指派配送员
+/api1/v2/admin/assignDelivery
 {
     "order_id_list":[23,24,25],
     "deliver_id":17
@@ -306,7 +327,9 @@
     "status":200,
     "data":{}
 }
+//如果指定的orderid列表中，存在状态不是“已支付”的order，则不对任何order进行修改，并返回错误信息“订单状态必须为'已支付'”
 10.获取图片的云存储空间
+/api1/v2/admin/generateurl
 {//不需要操作数据库
     "filename":"123.png"
 }
@@ -320,9 +343,10 @@
     }
 }
 11.保存菜品图片路径
+/api1/v2/admin/product/photo/add
 {//将所有small_url加上product_id保存到product_img表；按照product_id找到product表中记录并保存big_url到其ImgPath字段
     "product_id":123,
-    "canteen_id":1
+    "canteen_id":1,
     "big_url":"http://...",
     "small_urls":["http://...","http://...","http://..."]
 }
@@ -331,7 +355,9 @@
     "status":200,
     "data":{}
 }
+//此api不检查product_id是否存在
 12.保存轮播图图片路径
+/api1/v2/admin/saveCarouselUrl
 {//按照“canteen_id”找到canteen记录，将carousel_url保存到其ImgPath字段
     "canteen_id":2,
     "carousel_url":"http://..."
@@ -341,3 +367,4 @@
     "status":200,
     "data":{}
 }
+//此接口会检查餐厅id是否存在

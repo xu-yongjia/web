@@ -26,6 +26,8 @@ func AssignDelivery(c *gin.Context) {
 		return
 	}
 
+	var orderlist []DBstruct.Order
+
 	for _, orderID := range assignDeliveryRequest.OrderIDList {
 		var order DBstruct.Order
 		result := DBstruct.DB.First(&order, orderID)
@@ -38,7 +40,9 @@ func AssignDelivery(c *gin.Context) {
 			c.JSON(201, gin.H{"msg": "订单状态必须为'已支付'", "status": 201})
 			return
 		}
-
+		orderlist = append(orderlist, order)
+	}
+	for _, order := range orderlist {
 		order.Status = "送餐中"
 		order.DeliverID = assignDeliveryRequest.DeliverID
 		order.DeliverName = delivery.Truename

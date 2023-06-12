@@ -66,7 +66,7 @@ type Product_json struct {
 	ID            uint   `json:"id"`
 	Name          string `json:"name"`
 	CanteenID     int    `json:"canteen_id"`
-	CategoryID    int    `json:"category_id"`
+	CategoryID    uint   `json:"category_id"`
 	Title         string `json:"title"`
 	Info          string `json:"info"`
 	ImgPath       string `json:"img_path"`
