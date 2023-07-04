@@ -7,13 +7,13 @@ import (
 )
 
 type OrderProduct struct {
-	Id            uint   `json:"id"`                    // Order ID corresponds to Order struct
-	ProductId     uint   `json:"product_id"`            // Product ID corresponds to Order struct
-	ProductName   string `json:"product_name"`          // Product name corresponds to Product struct
-	ImgPath       string `json:"img_path"`              // ImgPath corresponds to Product struct
-	Num           int    `json:"num"`                   // Num corresponds to Order struct
-	Price         string `json:"product_selling_price"` // Price corresponds to Product struct
-	DiscountPrice string `json:"product_price"`         // DiscountPrice corresponds to Product struct
+	Id            uint   `json:"id"`                     // Order ID corresponds to Order struct
+	ProductId     uint   `json:"product_id"`             // Product ID corresponds to Order struct
+	ProductName   string `json:"product_name"`           // Product name corresponds to Product struct
+	ImgPath       string `json:"img_path"`               // ImgPath corresponds to Product struct
+	Num           int    `json:"num"`                    // Num corresponds to Order struct
+	Price         string `json:"product_price"`          // Price corresponds to Product struct
+	DiscountPrice string `json:"product_discount_price"` // DiscountPrice corresponds to Product struct
 }
 
 type PaginationOrderRequest struct {
