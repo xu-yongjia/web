@@ -23,7 +23,7 @@ func (service *ListRankingService) List() Response {
 	products := []DBstruct.Product{}
 	code := e.SUCCESS
 	// total := 0
-	if err := DBstruct.DB.Order("avg_score desc").Limit(4).Find(&products).Error; err != nil {
+	if err := DBstruct.DB.Order("score desc").Limit(4).Find(&products).Error; err != nil {
 		code = e.ERROR_DATABASE
 		return Response{
 			Status: code,
