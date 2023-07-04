@@ -10,13 +10,29 @@ import (
 
 // CreateComment 创建评论
 func CreateComment(c *gin.Context) {
-	service := CreateCommentService{}
-	if err := c.ShouldBind(&service); err == nil {
-		res := service.Create()
-		c.JSON(200, res)
-	} else {
-		c.JSON(201, ERRRESPONSE(err.Error(), 201))
-		// logging.Info(err)
+	type msg struct {
+		UserID         uint   `form:"user_id" json:"user_id"`
+		ProductID      uint   `form:"product_id" json:"product_id"`
+		ProductComment string `form:"product_comment" json:"product_comment"`
+		Score          string `form:"score" json:"score"`
+	}
+	var m msg
+	if e := c.ShouldBindJSON(&m); e == nil {
+		var user DBstruct.User
+		if e = DBstruct.DB.Where("id = ?", m.UserID).First(&user).Error; e == nil { //按照CanteenID查找账号
+			service := CreateCommentService{
+				UserName:       user.UserName,
+				ProductID:      m.ProductID,
+				ProductComment: m.ProductComment,
+				Score:          m.Score,
+			}
+			res := service.Create()
+			c.JSON(200, res)
+		} else {
+			c.JSON(201, ERRRESPONSE("账号不存在"+e.Error(), 201)) //具有请求中的CanteenID的账号不存在
+		}
+	} else { //JSON解析失败
+		c.JSON(400, ERRRESPONSE("数据格式错误", 201))
 	}
 }
 
@@ -70,7 +86,7 @@ func (service *CreateCommentService) Create() Response {
 		avg := strconv.FormatFloat(sum/float64(total), 'f', 2, 64)
 
 		var product DBstruct.Product
-		if err := DBstruct.DB.Model(&product).Where("id=?", service.ProductID).Update("avg_score", avg).Error; err != nil {
+		if err := DBstruct.DB.Model(&product).Where("id=?", service.ProductID).Update("score", avg).Error; err != nil {
 			// logging.Info(err)
 			code = e.ERROR_DATABASE
 		}
