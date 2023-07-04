@@ -12,7 +12,7 @@ var DB *gorm.DB
 
 func Database(connString string) {
 	db, err := gorm.Open("mysql", connString)
-	db.LogMode(true)
+	db.LogMode(false)
 	// Error
 	if err != nil {
 		panic(err)
