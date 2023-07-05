@@ -2,6 +2,7 @@ package api1
 
 import (
 	"gintest/DBstruct"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,14 +10,15 @@ import (
 // 按照用户ID和商品ID，添加新的“收藏”记录
 func AddCollect(c *gin.Context) {
 	type msg struct {
-		User_id    int `json:"user_id"`
-		Product_id int `json:"product_id"`
+		User_id    int    `json:"user_id"`
+		Product_id string `json:"product_id"`
 	}
 	var m msg
+	productid, _ := strconv.Atoi(m.Product_id)
 	if e := c.ShouldBindJSON(&m); e == nil {
 		newCollectRecord := DBstruct.Favorite{
 			UserID:   m.User_id,
-			ProducID: m.Product_id,
+			ProducID: productid,
 		}
 		if e = DBstruct.DB.Create(&newCollectRecord).Error; e == nil { //成功添加
 			c.JSON(200, SUCCESSRESPONSE_NODATA())

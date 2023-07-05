@@ -66,7 +66,7 @@ type Product_json struct {
 	ID            uint   `json:"id"`
 	Name          string `json:"name"`
 	CanteenID     int    `json:"canteen_id"`
-	CategoryID    uint   `json:"category_id"`
+	CategoryName  string `json:"category_name"` //原来是_id
 	Title         string `json:"title"`
 	Info          string `json:"info"`
 	ImgPath       string `json:"img_path"`
@@ -77,11 +77,16 @@ type Product_json struct {
 }
 
 func BuildProduct(item DBstruct.Product) Product_json {
+	var category DBstruct.Category
+	var categoryName string
+	if e := DBstruct.DB.Where(" category_id = ?", item.CategoryID).First(&category).Error; e == nil { //按照username查找账号
+		categoryName = category.CategoryName
+	}
 	return Product_json{
 		ID:            item.ID,
 		Name:          item.Name,
 		CanteenID:     item.CanteenID,
-		CategoryID:    item.CategoryID,
+		CategoryName:  categoryName,
 		Title:         item.Title,
 		Info:          item.Info,
 		ImgPath:       item.ImgPath,

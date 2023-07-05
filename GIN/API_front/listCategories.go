@@ -39,8 +39,8 @@ func (service *ListCategoriesService) List() Response {
 	}
 
 	//fmt.Printf("service.CanteenID: %v\n", service.CanteenID)
-	if service.CanteenID == 0 { //返回全部
-		if err := DBstruct.DB.Model(DBstruct.Category{}).Count(&total).Error; err != nil {
+	if service.CanteenID == 0 { //没有限制食堂，则返回全部
+		if err := DBstruct.DB.Model(DBstruct.Category{}).Group("category_id").Count(&total).Error; err != nil {
 			// logging.Info(err)
 			code = e.ERROR_DATABASE
 			return Response{
@@ -50,7 +50,7 @@ func (service *ListCategoriesService) List() Response {
 			}
 		}
 
-		if err := DBstruct.DB.Limit(service.Limit).Offset(service.Start).Find(&categories).Error; err != nil {
+		if err := DBstruct.DB.Limit(service.Limit).Offset(service.Start).Order("category_id desc").Find(&categories).Error; err != nil {
 			// logging.Info(err)
 			code = e.ERROR_DATABASE
 			return Response{
@@ -59,7 +59,7 @@ func (service *ListCategoriesService) List() Response {
 				Error:  err.Error(),
 			}
 		}
-	} else {
+	} else { //如果限制了食堂，那么类别不会重复
 		if err := DBstruct.DB.Model(DBstruct.Category{}).Where("canteen_id=?", service.CanteenID).Count(&total).Error; err != nil {
 			// logging.Info(err)
 			code = e.ERROR_DATABASE
@@ -70,7 +70,7 @@ func (service *ListCategoriesService) List() Response {
 			}
 		}
 
-		if err := DBstruct.DB.Where("canteen_id=?", service.CanteenID).Limit(service.Limit).Offset(service.Start).Find(&categories).Error; err != nil {
+		if err := DBstruct.DB.Where("canteen_id=?", service.CanteenID).Limit(service.Limit).Offset(service.Start).Order("category_id desc").Find(&categories).Error; err != nil {
 			// logging.Info(err)
 			code = e.ERROR_DATABASE
 			return Response{
@@ -103,9 +103,13 @@ func BuildCategory(item DBstruct.Category) Category {
 
 // BuildCategories 序列化分类列表
 func BuildCategories(items []DBstruct.Category) (categories []Category) {
+	var temp uint = 0
 	for _, item := range items {
-		category := BuildCategory(item)
-		categories = append(categories, category)
+		if temp != item.CategoryID { //跳过重复categoryId
+			temp = item.CategoryID
+			category := BuildCategory(item)
+			categories = append(categories, category)
+		}
 	}
 	return categories
 }

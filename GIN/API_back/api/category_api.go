@@ -20,6 +20,11 @@ type addCategoryParams struct {
 func (p *addCategoryParams) mergeFieldValue(model *DBstruct.Category) {
 	model.CanteenID = p.CanteenId
 	model.CategoryName = p.CategoryName
+	var category DBstruct.Category
+	err := DBstruct.DB.Where("category_name = ?", p.CategoryName).Find(&category).Error
+	if err == nil {
+		model.CategoryID = category.CategoryID
+	}
 }
 
 type updateCategoryParams struct {
@@ -36,6 +41,7 @@ func (p *updateCategoryParams) mergeFieldValue(model *DBstruct.Category) {
 
 type delParams struct {
 	CategoryId uint `json:"category_id" binding:"required"`
+	CanteenId  uint `json:"canteen_id" binding:"required"`
 }
 
 func GetCategoryList(c *gin.Context) {
@@ -105,9 +111,9 @@ func HasDelCategory(c *gin.Context) {
 		return
 	}
 	var product DBstruct.Product
-	err := DBstruct.DB.Where("category_id = ?", params.CategoryId).First(&product).Error //查找该分类下的产品
-	if err != nil {                                                                      //如果不存在该分类下的产品，则删除
-		DBstruct.DB.Where("category_id = ?", params.CategoryId).Delete(&DBstruct.Category{})
+	err := DBstruct.DB.Where("category_id = ? AND canteen_id = ?", params.CategoryId, params.CanteenId).First(&product).Error //查找该分类下的产品
+	if err != nil {                                                                                                           //如果不存在该分类下的产品，则删除
+		DBstruct.DB.Where("category_id = ? AND canteen_id = ?", params.CategoryId, params.CanteenId).Delete(&DBstruct.Category{})
 		c.JSON(200, api2.SUCCESSRESPONSE_NODATA())
 		return
 	}
@@ -120,7 +126,7 @@ func DelCategory(c *gin.Context) {
 		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
-	DBstruct.DB.Where("category_id = ?", params.CategoryId).Delete(&DBstruct.Product{})
-	DBstruct.DB.Where("category_id = ?", params.CategoryId).Delete(&DBstruct.Category{})
+	DBstruct.DB.Where("category_id = ? AND canteen_id = ?", params.CategoryId, params.CanteenId).Delete(&DBstruct.Product{})
+	DBstruct.DB.Where("category_id = ? AND canteen_id = ?", params.CategoryId, params.CanteenId).Delete(&DBstruct.Category{})
 	c.JSON(201, api2.SUCCESSRESPONSE_NODATA())
 }

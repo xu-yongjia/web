@@ -27,18 +27,24 @@ func NewRouter() *gin.Engine {
 		v1.POST("products", api1.ListProducts)
 		// 轮播图
 		v1.GET("carousels", api1.ListCarousels)
-		// 	// 用户注册
-		v1.POST("users/register", api1.RegistUser)
-		// 	// 用户登录
-		v1.POST("users/login", api1.UserLogin)
 
+		//沙箱支付回调函数1
 		v1.GET("/alipay/callback", api1.Callback)
+		//沙箱支付回调函数2
 		v1.POST("/alipay/notify", api1.Notify)
+		//用户注册
+		v1.POST("users/register", api1.RegistUser)
+		//用户登录
+		v1.POST("users/login", api1.UserLogin)
 
 		authed := v1.Group("users/")
 		authed.Use(middleware.JWT())
 		{
+			//添加收藏
+			authed.POST("collect/addCollect", api1.AddCollect)
+			//支付订单
 			authed.POST("payments", api1.Pay)
+			//下单
 			authed.POST("createOrder", api1.CreateOrder)
 			// 获取购物车
 			authed.POST("getCart", api1.GetCart)
@@ -53,8 +59,8 @@ func NewRouter() *gin.Engine {
 			// 		authed.POST("avatar", api1.UploadToken)
 			// 		//收藏夹操作
 			// 提交评论
-			authed.POST("comment", api1.CreateComment)
-			authed.POST("collect/addCollect", api1.AddCollect)
+			authed.POST("submitComment", api1.CreateComment)
+
 			authed.POST("collect/getCollect", api1.GetCollect)
 
 			authed.POST("shoppingCart/addShoppingCart", api1.AddShoppingCart)
@@ -65,9 +71,7 @@ func NewRouter() *gin.Engine {
 			authed.POST("postUseraddress", api1.PostUseraddress)
 			authed.POST("deleteAddress", api1.DeleteAddress)
 			authed.POST("saveEdit", api1.EditAddress)
-
 		}
-
 	}
 	v2 := r.Group("/api1/v2")
 	{

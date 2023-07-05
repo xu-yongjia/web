@@ -3,14 +3,16 @@ package api1
 import (
 	"gintest/DBstruct"
 
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
 // 按照User_id Product_id添加购物车记录，其中商品所属食堂通过查找数据表“product”获取，商品数量默认为1
 func AddShoppingCart(c *gin.Context) {
 	type msg struct {
-		User_id    int `json:"user_id"`
-		Product_id int `json:"product_id"`
+		User_id    int    `json:"user_id"`
+		Product_id string `json:"product_id"`
 	}
 	var m msg
 	if e := c.ShouldBindJSON(&m); e == nil {
@@ -20,9 +22,10 @@ func AddShoppingCart(c *gin.Context) {
 		}
 		productRecord := DBstruct.Product{}
 		if e = DBstruct.DB.Where("id = ? ", m.Product_id).First(&productRecord).Error; e == nil { //查找商品记录，获取食堂ID等信息
+			productid, _ := strconv.Atoi(m.Product_id)
 			newCartRecord := DBstruct.Cart{ //新的购物车记录
 				UserId:    m.User_id,
-				ProductId: m.Product_id,
+				ProductId: productid,
 				Number:    1,
 				CanteenID: productRecord.CanteenID,
 			}
@@ -39,5 +42,7 @@ func AddShoppingCart(c *gin.Context) {
 		} else { //解析json失败
 			c.JSON(400, ERRRESPONSE(e.Error(), 201))
 		}
+	} else {
+		c.JSON(400, ERRRESPONSE(e.Error(), 201))
 	}
 }

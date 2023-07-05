@@ -11,7 +11,6 @@ func ListRanking(c *gin.Context) {
 	service := ListRankingService{}
 	res := service.List()
 	c.JSON(200, res)
-
 }
 
 // ListRankingService 展示排行的服务

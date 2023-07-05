@@ -27,7 +27,6 @@ func BuildUser(u DBstruct.User) User_json {
 
 // 验证发来的用户名和密码（可能报告账号不存在或者密码错误），并生成一个token，随完整用户数据一起返回
 func UserLogin(c *gin.Context) {
-	fmt.Print("here!!!")
 	type msg struct {
 		Username string `json:"username"`
 		Password string `json:"password"`

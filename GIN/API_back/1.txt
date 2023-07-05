@@ -153,7 +153,7 @@
     "canteen_id":1,
     "category_name":"烧卤"
 }
-{//category_id是主键，自动分配
+{//因为categoryid和canteenid是复合主键，这里通过category_name查找是否存在同名的分类，如果存在，则将已存在的同名分类记录的category_id作为新增记录的category_id
     "status":200,
     "msg":"OK",
     "data":{}
@@ -162,6 +162,7 @@
 /api1/v2/admin/category/hasDel
 ①{
     "category_id":123
+    "canteen_id":1//new
 }
 {//此接口只删除分类，如果该分类下有菜品（在product中按“category_id”查找），返回201，“该类别中包含菜品信息，是否同步删除”
     "status":200,
@@ -171,6 +172,7 @@
 /api1/v2/admin/category/del
 ②{//上一个接口返回“该类别中包含菜品信息，是否同步删除”后，如果前端继续删除操作，则发送到这一个接口
     "category_id":123
+    "canteen_id":1//new
 }
 {//此接口会在删除分类的同时删除该类别下的所有菜品记录（在product表中按照category_id查找并删除）
     "status":200,
@@ -181,6 +183,7 @@
 /api1/v2/admin/category/update
 {
     "category_id":123,
+    "canteen_id":1,//new
     "category_name":"自选"
 }
 {//因为product中只有category_id这一个外键，所以修改category_name时不需要修改product表

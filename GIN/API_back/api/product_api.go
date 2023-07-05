@@ -25,14 +25,15 @@ func Buildproducts(a []DBstruct.Product) (b []productJson, e error) {
 	for _, product := range a {
 		category := DBstruct.Category{CategoryID: uint(product.CategoryID)}
 		e = DBstruct.DB.First(&category).Error
+		var category_name string
 		if e != nil {
-			return b, e
+			category_name = category.CategoryName
 		}
 		b = append(b, productJson{
 			ID:             product.ID,
 			Name:           product.Name,
 			Category_id:    product.CategoryID,
-			Category_name:  category.CategoryName,
+			Category_name:  category_name,
 			Info:           product.Info,
 			Img_path:       product.ImgPath,
 			Price:          product.Price,
