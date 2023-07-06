@@ -21,7 +21,6 @@ func CreateOrder(c *gin.Context) {
 		newOrderID := uint64(0)
 		newOrderRecords := []DBstruct.Order{}
 		for _, cartID := range m.TargetCarts {
-
 			cartRecord := DBstruct.Cart{}
 			if e = DBstruct.DB.Where("id = ?", cartID).First(&cartRecord).Error; e == nil { //对于请求中的每一个cartID，查找相应的cart记录
 				if firstCanteenId == 0 {
@@ -54,8 +53,11 @@ func CreateOrder(c *gin.Context) {
 		for _, new := range newOrderRecords {
 			DBstruct.DB.Create(&new)
 		}
+		type msg struct {
+			OrderID uint `json:"order_id"`
+		}
 		if e = DBstruct.DB.Delete(DBstruct.Cart{}, m.TargetCarts).Error; e == nil {
-			c.JSON(200, SUCCESSRESPONSE("下单成功，请前往支付"))
+			c.JSON(200, SUCCESSRESPONSE(msg{OrderID: uint(newOrderID)}))
 		} else {
 			c.JSON(201, ERRRESPONSE("删除购物车记录时出错："+e.Error(), 201))
 		}

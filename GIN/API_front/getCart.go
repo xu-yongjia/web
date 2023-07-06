@@ -10,9 +10,10 @@ import (
 type cart_json struct {
 	ID            uint      `json:"cart_id"`
 	UserId        int       `json:"user_id"`
-	ProductId     int       `json:"product_id"` //下单的产品
-	Number        int       `json:"number"`     //下单的数量
-	CanteenID     int       `json:"canteen_id"` //订单属于哪个食堂
+	ProductId     int       `json:"product_id"`   //下单的产品
+	ProductName   string    `json:"product_name"` //新增 商品的名字
+	Number        int       `json:"number"`       //下单的数量
+	CanteenID     int       `json:"canteen_id"`   //订单属于哪个食堂
 	Price         string    `json:"price"`
 	DiscountPrice string    `json:"discount_price"` //折后价
 	Info          string    `json:"product_intro"`  //商品简介
@@ -20,6 +21,7 @@ type cart_json struct {
 	CreateAt      time.Time `json:"create_at"`      //添加购物车的时间
 	Title         string    `json:"title"`          //标题
 	Score         string    `json:"score"`          //评分
+	Check         string    `json:"check"`          //方便前端，后端无用
 }
 
 func getCartsJson(src DBstruct.Cart) (cart_json, error) {
@@ -29,6 +31,7 @@ func getCartsJson(src DBstruct.Cart) (cart_json, error) {
 		ID:            src.ID,
 		UserId:        src.UserId,
 		ProductId:     src.ProductId,
+		ProductName:   product.Name,
 		Number:        src.Number,
 		CanteenID:     src.CanteenID,
 		Price:         product.Price,
@@ -49,7 +52,7 @@ func GetCart(c *gin.Context) {
 	var m msg
 	if e := c.ShouldBindJSON(&m); e == nil {
 		CartRecords := make([]DBstruct.Cart, 0)
-		if e = DBstruct.DB.Where("user_id = ?", m.UserID).Find(&CartRecords).Error; e == nil {
+		if e = DBstruct.DB.Where("user_id = ?", m.UserID).Order("id asc").Find(&CartRecords).Error; e == nil {
 			CartJsons := make([]cart_json, 0)
 			for _, cartRecord := range CartRecords {
 				if cartJson, e := getCartsJson(cartRecord); e == nil {

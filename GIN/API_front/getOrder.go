@@ -19,8 +19,8 @@ type OrderProduct struct {
 type PaginationOrderRequest struct {
 	//Page        int    `json:"page"`
 	//NumEachPage int    `json:"num_each_page"`
-	UserID int `json:"user_id"`
-	//Status      string `json:"status"`
+	UserID int    `json:"user_id"`
+	Status string `json:"status"`
 }
 
 type OrderDisplay struct {
@@ -53,13 +53,32 @@ func GetOrder(c *gin.Context) {
 	// } else {
 	//	DBstruct.DB.Where("user_id = ?", pagination.UserID).Order("updated_at").Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&orders)
 	// }
-	DBstruct.DB.Where("user_id = ?", pagination.UserID).Order("updated_at").Find(&orders)
+	db := DBstruct.DB
+	if pagination.Status != "全部" {
+		if pagination.Status == "所有已支付" {
+			db = db.Where("status <> '未支付'")
+		} else {
+			db = db.Where("status = ?", pagination.Status)
+		}
+	}
+	db.Where("user_id = ?", pagination.UserID).Order("updated_at").Find(&orders)
 	var orderDisplays []OrderDisplay
 	var orderDisplay OrderDisplay
 	for _, order := range orders {
 		if orderDisplay.OrderID != order.OrderID {
 			if orderDisplay.OrderID != 0 {
 				orderDisplays = append(orderDisplays, orderDisplay)
+			}
+			var delivername, deliverphone string
+			if order.DeliverName != "" {
+				delivername = order.DeliverName
+			} else {
+				delivername = "暂未分配"
+			}
+			if order.DeliverPhone != "" {
+				deliverphone = order.DeliverPhone
+			} else {
+				deliverphone = "暂未分配"
 			}
 			orderDisplay = OrderDisplay{
 				ID:           order.ID,
@@ -71,8 +90,8 @@ func GetOrder(c *gin.Context) {
 				Status:       order.Status,
 				CanteenID:    order.CanteenID,
 				DeliverID:    order.DeliverID,
-				DeliverName:  order.DeliverName,
-				DeliverPhone: order.DeliverPhone,
+				DeliverName:  delivername,
+				DeliverPhone: deliverphone,
 				Address:      order.Address,
 				UserPhone:    order.UserPhone,
 			}
@@ -91,7 +110,6 @@ func GetOrder(c *gin.Context) {
 			DiscountPrice: product.DiscountPrice,
 		}
 
-		// Add order product to order's product list
 		orderDisplay.OrderProductList = append(orderDisplay.OrderProductList, orderProduct)
 	}
 	if orderDisplay.OrderID != 0 {

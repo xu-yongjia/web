@@ -41,12 +41,20 @@ func (service *ShowImgsService) Show() Response {
 			Error:  err.Error(),
 		}
 	}
-
-	return Response{
-		Status: code,
-		Msg:    e.GetMsg(code),
-		Data:   BuildImgs(imgs),
+	if BuildImgs(imgs) != nil {
+		return Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Data:   BuildImgs(imgs),
+		}
+	} else {
+		return Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Data:   "",
+		}
 	}
+
 }
 
 // ProductImg 商品图片序列化器

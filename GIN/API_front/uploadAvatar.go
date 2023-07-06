@@ -82,7 +82,7 @@ func (service *UploadAvatarService) Post() Response {
 	}
 
 	// 查看图片
-	signedGetURL, err := bucket.SignURL(key, oss.HTTPGet, 600)
+	signedGetURL, err := bucket.SignURL(key, oss.HTTPGet, 24*3600*365*10)
 	fmt.Printf("signedGetURL: %v\n", signedGetURL) //debug
 	if err != nil {
 		// logging.Info(err)

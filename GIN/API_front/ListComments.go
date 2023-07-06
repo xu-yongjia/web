@@ -3,19 +3,18 @@ package api1
 import (
 	"gintest/DBstruct"
 	"gintest/pkg/e"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Comment 分类序列化器
 type Comment_json1 struct {
-	ID             uint      `json:"id"`
-	ProductID      uint      `json:"ProductID"`
-	UserName       string    `json:"user_name"`
-	ProductComment string    `json:"ProductComment"`
-	Score          string    `json:"score"`
-	CreatedAt      time.Time `json:"created_at"`
+	ID             uint   `json:"id"`
+	ProductID      uint   `json:"ProductID"`
+	UserName       string `json:"user_name"`
+	ProductComment string `json:"ProductComment"`
+	Score          string `json:"score"`
+	CreatedAt      string `json:"created_at"`
 }
 
 // ListComments 评论列表接口
@@ -37,7 +36,7 @@ func BuildComment(item DBstruct.Comment) Comment_json1 {
 		UserName:       item.UserName,
 		ProductComment: item.ProductComment,
 		Score:          item.Score,
-		CreatedAt:      item.CreatedAt,
+		CreatedAt:      item.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
 }
 

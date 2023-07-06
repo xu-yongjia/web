@@ -16,7 +16,7 @@ func NewRouter() *gin.Engine {
 		// 商品详情
 		v1.POST("product/getDetails", api1.ShowProduct)
 		// 获取菜品图片url
-		v1.POST("product/getDetailspicture", api1.ShowProductImgs)
+		v1.POST("product/getDetailsPicture", api1.ShowProductImgs)
 		// 获取评论
 		v1.POST("product/getDetailsComment", api1.ListComments)
 		// 获取评分排行榜
@@ -40,12 +40,20 @@ func NewRouter() *gin.Engine {
 		authed := v1.Group("users/")
 		authed.Use(middleware.JWT())
 		{
+			//获取信息数量统计
+			authed.POST("showCount", api1.ShowCount)
+			//上传头像
+			authed.POST("uploadAvatar", api1.UploadToken)
+			//更改用户名
+			authed.POST("editAccount", api1.EditAccount)
 			//添加收藏
 			authed.POST("collect/addCollect", api1.AddCollect)
 			//支付订单
 			authed.POST("payments", api1.Pay)
 			//下单
 			authed.POST("createOrder", api1.CreateOrder)
+			//确认收餐
+			authed.POST("recieveOrder", api1.RecieveOrder)
 			// 获取购物车
 			authed.POST("getCart", api1.GetCart)
 			// 获取订单

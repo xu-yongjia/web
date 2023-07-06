@@ -350,8 +350,8 @@
 {//将所有small_url加上product_id保存到product_img表；按照product_id找到product表中记录并保存big_url到其ImgPath字段
     "product_id":123,
     "canteen_id":1,
-    "big_url":"http://...",
-    "small_urls":["http://...","http://...","http://..."]
+    "big_urls":["http://...","http://...","http://..."],//从字符串改为字符串数组
+    "small_url":"http://..."//从字符串数组改为字符串
 }
 {
     "msg":"OK",
@@ -363,7 +363,8 @@
 /api1/v2/admin/saveCarouselUrl
 {//按照“canteen_id”找到canteen记录，将carousel_url保存到其ImgPath字段
     "canteen_id":2,
-    "carousel_url":"http://..."
+    "carousel_url":"http://...",
+    "board":"xx食堂 xxxxx"
 }
 {
     "msg":"OK",

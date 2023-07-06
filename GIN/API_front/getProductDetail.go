@@ -21,7 +21,7 @@ func ShowProduct(c *gin.Context) {
 
 // ShowProductService 商品详情的服务
 type ShowProductService struct {
-	ProductID int `form:"productID" json:"productID"`
+	ProductID string `form:"productID" json:"productID"`
 }
 
 // Show 商品

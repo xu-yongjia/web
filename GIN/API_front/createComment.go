@@ -21,6 +21,7 @@ func CreateComment(c *gin.Context) {
 		var user DBstruct.User
 		if e = DBstruct.DB.Where("id = ?", m.UserID).First(&user).Error; e == nil { //按照CanteenID查找账号
 			service := CreateCommentService{
+				UserID:         int(m.UserID),
 				UserName:       user.UserName,
 				ProductID:      m.ProductID,
 				ProductComment: m.ProductComment,
@@ -38,6 +39,8 @@ func CreateComment(c *gin.Context) {
 
 // CreateCommentService 评论创建的服务
 type CreateCommentService struct {
+	OrderID        uint   `form:"order_id" json:"order_id"`
+	UserID         int    `form:"user_id" json:"user_id"`
 	UserName       string `form:"user_name" json:"user_name"`
 	ProductID      uint   `form:"product_id" json:"product_id"`
 	ProductComment string `form:"product_comment" json:"product_comment"`
@@ -47,25 +50,42 @@ type CreateCommentService struct {
 // Create 创建评论
 func (service *CreateCommentService) Create() Response {
 	comment := DBstruct.Comment{
+		UserID:         service.UserID,
 		UserName:       service.UserName,
 		ProductID:      service.ProductID,
 		ProductComment: service.ProductComment,
 		Score:          service.Score,
 	}
-	code := e.SUCCESS
-	err := DBstruct.DB.Create(&comment).Error
-	if err != nil {
-		// logging.Info(err)
-		code = e.ERROR_DATABASE
-		return Response{
-			Status: code,
-			Msg:    e.GetMsg(code),
-			Error:  err.Error(),
+	var historyComment DBstruct.Comment
+	err := DBstruct.DB.Where("user_id=? and product_id=?", service.UserID, service.ProductID).First(&historyComment).Error //查找该用户是否对该商品进行过评价，如有则覆盖
+	if err == nil {
+		historyComment.UserName = service.UserName
+		historyComment.ProductComment = service.ProductComment
+		historyComment.Score = service.Score
+		err = DBstruct.DB.Save(&historyComment).Error
+		if err != nil {
+			return Response{
+				Status: e.ERROR_DATABASE,
+				Msg:    e.GetMsg(e.ERROR_DATABASE),
+			}
+		}
+	} else { //如没有则新建
+		code := e.SUCCESS
+		err := DBstruct.DB.Create(&comment).Error
+		if err != nil {
+			code = e.ERROR_DATABASE
+			return Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+			}
 		}
 	}
+	//更新order记录的状态
+	DBstruct.DB.Model(&DBstruct.Order{}).Where("order_id = ? AND product_id = ?", service.OrderID, service.ProductID).Update("status", "已评价")
 	//更新平均评分
 	comments := []DBstruct.Comment{}
 	total := 0
+	code := e.SUCCESS
 	if err := DBstruct.DB.Model(DBstruct.Comment{}).Where("product_id=?", service.ProductID).Count(&total).Error; err != nil {
 		// logging.Info(err)
 		code = e.ERROR_DATABASE
@@ -94,31 +114,8 @@ func (service *CreateCommentService) Create() Response {
 	return Response{
 		Status: code,
 		Msg:    e.GetMsg(code),
-		Data:   BuildComment2(comment),
 	}
 
-}
-
-// Comment 分类序列化器
-type Comment_json2 struct {
-	ID             uint   `json:"id"`
-	ProductID      uint   `json:"ProductID"`
-	UserName       string `json:"user_name"`
-	ProductComment string `json:"ProductComment"`
-	Score          string `json:"score"`
-	CreatedAt      int64  `json:"commentDate"`
-}
-
-// BuildComment2 序列化分类
-func BuildComment2(item DBstruct.Comment) Comment_json2 {
-	return Comment_json2{
-		ID:             item.ID,
-		ProductID:      item.ProductID,
-		UserName:       item.UserName,
-		ProductComment: item.ProductComment,
-		Score:          item.Score,
-		CreatedAt:      item.CreatedAt.Unix(),
-	}
 }
 
 // TrackedErrorResponse 有追踪信息的错误响应

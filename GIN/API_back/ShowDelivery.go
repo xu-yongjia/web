@@ -2,15 +2,16 @@ package api2
 
 import (
 	"gintest/DBstruct"
-	"github.com/gin-gonic/gin"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type DeliveryPaginationRequest struct {
-	Page           int    `json:"page"`
-	NumEachPage    int    `json:"num_each_page"`
-	CanteenID      int    `json:"canteen_id"`
-	TruenameOrID   string `json:"truename_or_id"`
+	Page         int    `json:"page"`
+	NumEachPage  int    `json:"num_each_page"`
+	CanteenID    int    `json:"canteen_id"`
+	TruenameOrID string `json:"truename_or_id"`
 }
 
 type DeliveryDisplay struct {
@@ -36,9 +37,9 @@ func ShowDelivery(c *gin.Context) {
 
 	if pagination.TruenameOrID != "" {
 		if id, err := strconv.Atoi(pagination.TruenameOrID); err == nil {
-			DBstruct.DB.Where("canteen_id = ? AND (truename = ? OR id = ?)", pagination.CanteenID, pagination.TruenameOrID, id).Find(&deliveries)
+			DBstruct.DB.Where("canteen_id = ? AND (truename like ? OR id = ?)", pagination.CanteenID, "%"+pagination.TruenameOrID+"%", id).Find(&deliveries)
 		} else {
-			DBstruct.DB.Where("canteen_id = ? AND truename = ?", pagination.CanteenID, pagination.TruenameOrID).Find(&deliveries)
+			DBstruct.DB.Where("canteen_id = ? AND truename like ?", pagination.CanteenID, "%"+pagination.TruenameOrID+"%").Find(&deliveries)
 		}
 	} else {
 		DBstruct.DB.Where("canteen_id = ?", pagination.CanteenID).Limit(pagination.NumEachPage).Offset((pagination.Page - 1) * pagination.NumEachPage).Find(&deliveries)
@@ -56,7 +57,7 @@ func ShowDelivery(c *gin.Context) {
 	}
 
 	c.JSON(200, SUCCESSRESPONSE(gin.H{
-		"count":        total,
+		"count":       total,
 		"deliverlist": deliverDisplays,
 	}))
 }

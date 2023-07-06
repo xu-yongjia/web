@@ -106,9 +106,9 @@ func ShowOrder(c *gin.Context) {
 	}
 	var totalCount int
 	if pagination.Status != "" {
-		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status).Count(&totalCount)
+		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ? AND status = ?", pagination.CanteenId, pagination.Status).Group("order_id").Count(&totalCount)
 	} else {
-		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ?", pagination.CanteenId).Count(&totalCount)
+		DBstruct.DB.Model(&DBstruct.Order{}).Where("canteen_id = ?", pagination.CanteenId).Group("order_id").Count(&totalCount)
 	}
 	if pagination.SearchOrderID != 0 {
 		totalCount = len(orderDisplays)

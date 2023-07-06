@@ -1,6 +1,7 @@
 package api1
 
 import (
+	"fmt"
 	"gintest/DBstruct"
 	"gintest/pkg/e"
 
@@ -18,16 +19,15 @@ func ListCarousels(c *gin.Context) {
 	}
 }
 
-// ListCarouselsService 视频列表服务
+// ListCarouselsService 轮播图服务
 type ListCarouselsService struct {
 }
 
-// List 视频列表
 func (service *ListCarouselsService) List() Response {
-	carousels := []DBstruct.Carousel{}
+	Canteens := []DBstruct.Canteen{}
 	code := e.SUCCESS
 
-	if err := DBstruct.DB.Find(&carousels).Error; err != nil {
+	if err := DBstruct.DB.Find(&Canteens).Error; err != nil {
 		code = e.ERROR_DATABASE
 		return Response{
 			Status: code,
@@ -39,33 +39,42 @@ func (service *ListCarouselsService) List() Response {
 	return Response{
 		Status: code,
 		Msg:    e.GetMsg(code),
-		Data:   BuildCarousels(carousels),
+		Data:   BuildCarousels(Canteens),
 	}
 }
 
 // Carousel 轮播图序列化器
 type Carousel struct {
-	ID        uint   `json:"id"`
-	ImgPath   string `json:"img_path"`
-	CanteenID uint   `json:"product_id"` //json名是历史遗留问题，不要在意
-	CreatedAt int64  `json:"created_at"`
+	ImgPath     string `json:"img_path"`
+	CanteenID   uint   `json:"canteen_id"`
+	CanteenName string `json:"canteen_name"`
 }
 
 // BuildCarousel 序列化轮播图
-func BuildCarousel(item DBstruct.Carousel) Carousel {
+func BuildCarousel(item DBstruct.Canteen) Carousel {
 	return Carousel{
-		ID:        item.ID,
-		ImgPath:   item.ImgPath,
-		CanteenID: item.CanteenId,
-		CreatedAt: item.CreatedAt.Unix(),
+		ImgPath:     item.ImgPath,
+		CanteenID:   uint(item.CanteenID),
+		CanteenName: item.CanteenName,
 	}
 }
 
 // BuildCarousels 序列化轮播图列表
-func BuildCarousels(items []DBstruct.Carousel) (carousels []Carousel) {
+type JsonCarousel struct {
+	Carousels []Carousel `json:"carousel"`
+	Board     []string   `json:"board"`
+}
+
+func BuildCarousels(items []DBstruct.Canteen) (jc JsonCarousel) {
+	var carousels []Carousel
+	var msg []string
 	for _, item := range items {
 		carousel := BuildCarousel(item)
 		carousels = append(carousels, carousel)
+		msg = append(msg, item.Board)
 	}
-	return carousels
+	fmt.Print(msg)
+	jc.Board = msg
+	jc.Carousels = carousels
+	return
 }

@@ -1,10 +1,9 @@
 package api2
 
 import (
-	
+	"mime"
 	"os"
 	"path/filepath"
-	"mime"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
@@ -26,7 +25,7 @@ func UploadToken(c *gin.Context) {
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, Responsestruct{
-			Status: 201,  // Status code for request error
+			Status: 201, // Status code for request error
 			Msg:    "json参数格式有误",
 			Data:   map[string]string{},
 		})
@@ -74,7 +73,7 @@ func (service *UploadImgService) Post() Responsestruct {
 		}
 	}
 
-	signedGetURL, err := bucket.SignURL(key, oss.HTTPGet, 600)
+	signedGetURL, err := bucket.SignURL(key, oss.HTTPGet, 24*60*60*365*10)
 	if err != nil {
 		return Responsestruct{
 			Status: 404,

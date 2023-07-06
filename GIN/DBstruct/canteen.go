@@ -9,4 +9,5 @@ type Canteen struct {
 	CanteenName string
 	ImgPath     string
 	Password    string
+	Board       string //首页公告信息
 }

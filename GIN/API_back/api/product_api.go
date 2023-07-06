@@ -16,17 +16,17 @@ type productJson struct {
 	Img_path       string `json:"img_path"`
 	Price          string `json:"price"`
 	Discount_price string `json:"discount_price"`
-	Title          string `json:"titile"`
+	Title          string `json:"title"`
 	Score          string `json:"score"`
 	Sales          int    `json:"sales"`
 }
 
 func Buildproducts(a []DBstruct.Product) (b []productJson, e error) {
 	for _, product := range a {
-		category := DBstruct.Category{CategoryID: uint(product.CategoryID)}
+		category := DBstruct.Category{CategoryID: uint(product.CategoryID), CanteenID: uint(product.CanteenID)}
 		e = DBstruct.DB.First(&category).Error
 		var category_name string
-		if e != nil {
+		if e == nil {
 			category_name = category.CategoryName
 		}
 		b = append(b, productJson{
@@ -43,7 +43,7 @@ func Buildproducts(a []DBstruct.Product) (b []productJson, e error) {
 			Sales:          product.Sales,
 		})
 	}
-	return b, e
+	return b, nil
 }
 
 type productListParams struct {
@@ -106,8 +106,8 @@ type delProductParams struct {
 type savePhotoParams struct {
 	ProductId int      `json:"product_id" binding:"required"`
 	CanteenId int      `json:"canteen_id" binding:"required"`
-	BigUrl    string   `json:"big_url" binding:"required"`
-	SmallUrls []string `json:"small_urls" binding:"required"`
+	BigUrls   []string `json:"big_urls" binding:"required"`
+	SmallUrl  string   `json:"small_url" binding:"required"`
 }
 
 func AddProduct(c *gin.Context) {
@@ -204,12 +204,12 @@ func SavePhoto(c *gin.Context) {
 		c.JSON(201, api2.ERRRESPONSE("数据格式错误", 201))
 		return
 	}
-	err := DBstruct.DB.Model(&DBstruct.Product{}).Where("id = ?", params.ProductId).Update("img_path", params.BigUrl).Error
+	err := DBstruct.DB.Model(&DBstruct.Product{}).Where("id = ?", params.ProductId).Update("img_path", params.SmallUrl).Error
 	if err != nil {
 		c.JSON(201, api2.ERRRESPONSE("服务异常", 201))
 		return
 	}
-	for _, url := range params.SmallUrls {
+	for _, url := range params.BigUrls {
 		DBstruct.DB.Model(&DBstruct.ProductImg{}).Create(&DBstruct.ProductImg{ProductID: params.ProductId, ImgPath: url})
 	}
 	c.JSON(200, api2.SUCCESSRESPONSE(gin.H{}))

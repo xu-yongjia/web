@@ -29,18 +29,20 @@ func AssignDelivery(c *gin.Context) {
 	var orderlist []DBstruct.Order
 
 	for _, orderID := range assignDeliveryRequest.OrderIDList {
-		var order DBstruct.Order
-		result := DBstruct.DB.First(&order, orderID)
+		var orders []DBstruct.Order
+		result := DBstruct.DB.Where("order_id = ?", orderID).Find(&orders)
 		if result.Error != nil {
 			c.JSON(201, gin.H{"msg": "无法找到指定的订单", "status": 201})
 			return
 		}
-
-		if order.Status != "已支付" {
-			c.JSON(201, gin.H{"msg": "订单状态必须为'已支付'", "status": 201})
-			return
+		for _, order := range orders {
+			if order.Status != "已支付" {
+				c.JSON(201, gin.H{"msg": "订单状态必须为'已支付'", "status": 201})
+				return
+			}
+			orderlist = append(orderlist, order)
 		}
-		orderlist = append(orderlist, order)
+
 	}
 	for _, order := range orderlist {
 		order.Status = "送餐中"

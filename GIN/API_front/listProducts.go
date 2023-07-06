@@ -13,6 +13,8 @@ import (
 func ListProducts(c *gin.Context) {
 	var service ListProductsService
 	if err := c.ShouldBind(&service); err == nil {
+		service.Start = (service.CurrentPage - 1) * service.PageSize
+		service.Limit = service.PageSize
 		res := service.List()
 		c.JSON(200, res)
 	} else {
@@ -23,8 +25,10 @@ func ListProducts(c *gin.Context) {
 
 // ListProductsService 商品列表服务
 type ListProductsService struct {
-	Limit int `form:"limit" json:"limit"` //分页查找
-	Start int `form:"start" json:"start"`
+	CurrentPage int `form:"currentPage" json:"currentPage"`
+	PageSize    int `form:"pageSize" json:"pageSize"`
+	Limit       int `form:"limit" json:"limit"` //分页查找
+	Start       int `form:"start" json:"start"`
 	// CanteenID  uint `form:"canteen_id" json:"canteen_id"`
 	CanteenID uint `form:"placeID" json:"placeID"`
 	// CategoryID uint `form:"category_id" json:"category_id"`

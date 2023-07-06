@@ -35,7 +35,11 @@ func AddShoppingCart(c *gin.Context) {
 				type returnmsg struct {                                                              //包装返回信息
 					CartData []DBstruct.Cart `json:"shoppingCartData"`
 				}
-				c.JSON(200, SUCCESSRESPONSE(returnmsg{shoppingCartData})) //返回修改后的地址列表
+				c.JSON(200, Response{
+					Msg:    "添加成功",
+					Status: 200,
+					Data:   returnmsg{shoppingCartData},
+				}) //返回修改后的地址列表
 			} else { //插入失败
 				c.JSON(201, ERRRESPONSE(e.Error(), 201))
 			}
